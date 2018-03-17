@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>停车场支付信息</title>
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{easyui/themes/bootstrap/easyui.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap-datetimepicker.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{bootstrap-select/css/bootstrap-select.css}" />
+    <script type="text/javascript" th:src="@{easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" th:src="@{bootstrap-select/js/bootstrap-select.js}"></script>
+    <style type="text/css">.panel-body{padding: 0px;}</style>
+</head>
+<body>
+<div style = "margin: 10px 15px 10px 25px;">
+    停车场：
+    <select id="park" class="selectpicker" data-live-search="true" >
+        <!--/*@thymesVar id="parkList" type="java"*/-->
+        <option th:each="item,iterStat:${parkList}" th:text="${item.parkname}" th:value="${item.parkid}" ></option>
+    </select>
+    &nbsp;&nbsp;&nbsp;
+    开始日期：<input id = "startDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
+    结束日期：<input id = "endDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn dropdown-toggle" id="search" data-toggle="dropdown">搜索</button>
+    <span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：2018-03-16之前数据不能查看</span>
+
+    <table id = "dg" class="easyui-datagrid" style="margin-top:50px;padding: 80px;display:none"
+           data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...',emptyMsg:'no records found'">
+        <thead>
+        <tr>
+            <th data-options="field:'plateNum',width:100,align:'center',halign:'center'">车牌号</th>
+            <th data-options="field:'originalAmount',width:100,align:'center',halign:'center'">应付金额</th>
+            <th data-options="field:'recordAmount',width:100,align:'center',halign:'center'">实付金额</th>
+            <th data-options="field:'couponamount',width:100,align:'center',halign:'center'">优惠金额</th>
+            <th data-options="field:'tradeDate',width:100,align:'center',halign:'center'">交易时间</th>
+            <!--<th data-options="field:'explain',width:100,align:'center',halign:'center'">支付信息</th>-->
+        </tr>
+        </thead>
+    </table>
+</div>
+<script>
+    $('#dg').css("height",window.innerHeight-66);
+    $('#search').on('click',function () {
+        var park = $('#park').val();
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        if(park==''){
+            $.messager.alert('系统消息','请选择停车场在进行搜索!!!');
+            return;
+        }else if(startDate==''){
+            $.messager.alert('系统消息','请选择开始日期在进行搜索!!!');
+            return;
+        }else if(endDate==''){
+            $.messager.alert('系统消息','请选择结束日期在进行搜索!!!');
+            return;
+        }
+        var opts = $("#dg").datagrid("options");
+        opts.url = "getParkPayInfo";
+        opts.emptyMsg = "没欸欸欸i额";
+        $('#dg').datagrid('load', {
+            parkid: park,
+            beginDate: startDate,
+            endDate:endDate
+        });
+    });
+
+
+</script>
+<script type="text/javascript" th:src="@{datetimepicker/js/user-defined.js}"></script>
+</body>
+</html>

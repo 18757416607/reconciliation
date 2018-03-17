@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reconciliation.dao.HangZhouAoTiMapper">
+
+    <!--  获取杭州奥体支付信息  -->
+    <select id="getHangZhouAoTiPayInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT plateNum,originalAmount,recordAmount,DATE_FORMAT(endTime,'%Y-%m-%d %H:%i:%S') endTime,if(locate('Wxpay',paytype)>0,'微信支付','支付宝支付') paytype from base_parkrecord_list
+        where parkId = '1149' and paytype in('sosoPaySMWxpayIn','sosoPaySMAlipayIn','sosoPaySMAlipayOut','sosoPaySMWxpayOut')
+        and recordStatus = '00' and createtime BETWEEN #{beginTime} and #{endTime} and plateNum like CONCAT('%',#{platenum},'%')
+    </select>
+
+	
+</mapper>

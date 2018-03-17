@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+   通用SQL语句编写
+ -->
+<mapper namespace="com.reconciliation.dao.CommonMapper">
+
+    <!--  查询  所有供应商 数据库链接 信息 -->
+	<select id="getPytoolParkClientAll" resultType="java.util.Map">
+        select parkId,parkName,dbPass,dbPort,dbUser,dbName,dbServer,isFpt,parkNameAbbreviation,isCloud,isSearch from pytool_parkclient
+    </select>
+
+    <!-- 查询  一个供应商 数据库链接 信息 -->
+    <select id="getOnePytoolParkClient" parameterType="java.lang.String" resultType="java.util.Map">
+        select parkName,dbPass,dbPort,dbUser,dbName,dbServer,isFpt,parkNameAbbreviation,isCloud,isSearch from pytool_parkclient
+        where parkId = #{parkid} LIMIT 1
+    </select>
+
+    <!-- 修改数据连接信息 -->
+    <update id="updateParkClient" parameterType="java.util.Map">
+        UPDATE pytool_parkclient
+        <set>
+            <if test="isSearch != null">isSearch = #{isSearch},</if>
+            <if test="isCloud != null">isCloud = #{isCloud},</if>
+        </set>
+        WHERE parkId = #{parkid}
+    </update>
+
+    <!-- 停车场编号转换 -->
+    <select id="findOnePlatformransforParkId" parameterType="java.lang.String" resultType="java.util.Map">
+        select id,platform_id,park_id,park_name,`status`,lk_park_name from platform_transfor_park_id
+        <where>
+            <if test="parkid != null and parkid != ''">and park_id = #{parkid}</if>
+            <if test="platformid !=null and platformid != ''">and platform_id = #{platformid}</if>
+        </where>
+    </select>
+
+    <!-- 查询连接信息表中的所有的停车场信息 -->
+    <select id="getParkList" resultType="java.util.Map">
+        select parkid,parkname from pytool_parkclient WHERE isSearch = '1'
+    </select>
+
+    <!-- 添加  银联  对账单数据 -->
+    <insert id="insertUnionpay" parameterType="java.util.Map">
+          insert into base_unionPay_wallet_uploadData(money,cRecordId,pRecordId,UnionpayRightsId,cmbId,parkId,createTime,payType,billDate)
+          values(#{money},#{cRecordId},#{pRecordId},#{UnionpayRightsId},#{cmbId},#{parkId},#{createTime},#{payType},#{billDate})
+    </insert>
+
+    <!-- 查询   银联 的对账信息 -->
+    <select id="getUnionPayUploadData" parameterType="java.util.Map" resultType="java.util.Map">
+        select money,cRecordId,pRecordId,UnionpayRightsId,payType,cmbId from base_unionPay_wallet_uploadData
+        where parkId = #{parkId} and billDate BETWEEN #{beginDate} and #{endDate} and payType in (${paytrench_paytype})
+    </select>
+
+    <!-- 获取招商代扣获取银联权益的数据是否存在 -->
+    <select id="getEquityPlatPayOrCmbAutoPayInfo" resultType="java.util.Map" parameterType="java.lang.String">
+      select pRecordId,paytype from base_parkrecord_list where pRecordId IN (#{pRecordIdList})
+    </select>
+
+</mapper>

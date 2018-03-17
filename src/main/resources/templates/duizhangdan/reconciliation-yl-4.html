@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{easyui/themes/bootstrap/easyui.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap-datetimepicker.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{bootstrap-select/css/bootstrap-select.css}" />
+    <script type="text/javascript" th:src="@{easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" th:src="@{bootstrap-select/js/bootstrap-select.js}"></script>
+    <title>停车场、一咻对账完全失败数据</title>
+    <style type="text/css">.panel-body{padding: 0px;}</style>
+
+</head>
+<div style = "margin: 10px 15px 10px 25px;">
+    停车场：
+    <select id="park" class="selectpicker" data-live-search="true" >
+        <!--/*@thymesVar id="parkList" type="java"*/-->
+        <option th:each="item,iterStat:${parkList}" th:text="${item.parkname}" th:value="${item.parkid}" ></option>
+    </select>
+    &nbsp;&nbsp;&nbsp;
+    开始日期：<input id = "startDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
+    结束日期：<input id = "endDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn dropdown-toggle" id="search" data-toggle="dropdown">搜索</button>
+
+    <div id = "d1" style="width: 49%;float: left;">
+        <h2 style="text-align:center;padding-bottom: 5px;">停车场端有数据,一咻端数据对不上</h2>
+        <table id = "dg1" class="easyui-datagrid" style="width: 750px;"
+               data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...'">
+            <thead>
+            <tr>
+                <th data-options="field:'cRecordId',width:100,align:'center',halign:'center'">卡宾流水号</th>
+                <th data-options="field:'pRecordId',width:100,align:'center',halign:'center'">停车场流水号</th>
+                <th data-options="field:'dkid',width:100,align:'center',halign:'center'">代扣表ID</th>
+                <th data-options="field:'plateNum',width:100,align:'center',halign:'center'">车牌号</th>
+                <th data-options="field:'cabin_paytype',width:100,align:'center',halign:'center'">支付类型</th>
+                <th data-options="field:'cabin_originalAmount',width:100,align:'center',halign:'center'">一咻应付</th>
+                <th data-options="field:'cabin_recordAmount',width:100,align:'center',halign:'center'">一咻实付</th>
+                <th data-options="field:'cabin_couponamount',width:100,align:'center',halign:'center'">一咻优惠</th>
+                <th data-options="field:'cabin_date',width:100,align:'center',halign:'center'">一咻记录时间</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div id = "d2" style="width: 48%;float: right;">
+        <h2 style="text-align:center;padding-bottom: 5px;">停车场端有数据,一咻端数据对不上</h2>
+        <table id = "dg2" class="easyui-datagrid" style="width: 750px;display: none"
+               data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...'">
+            <thead>
+            <tr>
+                <th data-options="field:'pRecordId',width:100,align:'center',halign:'center'">停车场流水号</th>
+                <th data-options="field:'plateNum',width:100,align:'center',halign:'center'">车牌号</th>
+                <th data-options="field:'park_explain',width:100,align:'center',halign:'center'">支付类型</th>
+                <th data-options="field:'park_originalAmount',width:100,align:'center',halign:'center'">停车场应付</th>
+                <th data-options="field:'park_recordAmount',width:100,align:'center',halign:'center'">停车场实付</th>
+                <th data-options="field:'park_couponamount',width:100,align:'center',halign:'center'">停车场优惠</th>
+                <th data-options="field:'park_date',width:100,align:'center',halign:'center'">停车场记录时间</th>
+                <th data-options="field:'remark',width:100,align:'center',halign:'center'">备注</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+</div>
+<script>
+    $('#dg1').css("height",window.innerHeight-136);
+    $('#dg2').css("height",window.innerHeight-136);
+    $('#search').on('click',function () {
+        var park = $('#park').val();
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        if(park==''){
+            $.messager.alert('系统消息','请选择停车场在进行搜索!!!');
+            return;
+        }else if(startDate==''){
+            $.messager.alert('系统消息','请选择开始日期在进行搜索!!!');
+            return;
+        }else if(endDate==''){
+            $.messager.alert('系统消息','请选择结束日期在进行搜索!!!');
+            return;
+        }
+        $('#dg2').css('display','block');
+        var opts1 = $("#dg1").datagrid("options");
+        opts1.url = "getYiXiuNoAllParkData1";
+        $('#dg1').datagrid('load', {
+            parkId: park,
+            beginTime: startDate,
+            endTime:endDate
+        });
+        var opts2 = $("#dg2").datagrid("options");
+        opts2.url = "getYiXiuNoAllParkData2";
+        $('#dg2').datagrid('load', {
+            parkId: park,
+            beginTime: startDate,
+            endTime:endDate
+        });
+    });
+
+
+</script>
+<script type="text/javascript" th:src="@{datetimepicker/js/user-defined.js}"></script>
+</html>

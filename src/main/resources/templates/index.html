@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link charset="UTF-8"  rel="stylesheet" type="text/css" th:href="@{easyui/themes/bootstrap/easyui.css}" />
+    <script type="text/javascript" th:src="@{easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{easyui/jquery.easyui.min.js}"></script>
+</head>
+<body class="easyui-layout">
+    <!--/*@thymesVar id="aa" type="java"*/-->
+    <p th:text = "${aa}"></p>
+    <div data-options="region:'west',title:'导航',split:true" style="width:300px;">
+        <div id="aa" class="easyui-accordion" data-options="fit:true,selected:1,border:false" style="width:300px;height:200px;">
+            <div title="银联对账信息" data-options="iconCls:'icon-save'" style="overflow:auto;padding:10px;">
+                <ul id="yltree" ></ul>
+            </div>
+            <div title="银商对账信息" data-options="iconCls:'icon-reload',selected:true" style="padding:10px;">
+                <ul id="ystree" class="easyui-tree">
+                    <li>
+                        <span>银商对账列表</span>
+                        <ul>
+                            <li><span>银商、停车场对账成功数据</span></li>
+                            <li><span>银商、停车场对账不完全成功数据</span></li>
+                            <li><span>银商、停车场对账失败数据</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'center',title:'内容'" style="padding:5px;background:#eee;">
+        <iframe id = "ife" src="" width="100%" height="100%" scrolling="no" frameborder="0"></iframe>
+    </div>
+</body>
+</html>

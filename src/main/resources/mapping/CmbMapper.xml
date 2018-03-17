@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reconciliation.dao.CmbMapper">
+
+    <!-- 查询   招商 的对账信息 -->
+    <select id="getUnionPayUploadData" parameterType="java.util.Map" resultType="java.util.Map">
+        select money,cRecordId,pRecordId,UnionpayRightsId,payType,cmbId from base_unionPay_wallet_uploadData
+        where billDate BETWEEN #{beginDate} and #{endDate} and payType in (${paytrench_paytype})
+    </select>
+
+	
+</mapper>

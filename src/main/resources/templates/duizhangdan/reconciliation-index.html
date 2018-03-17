@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>对账单首页</title>
+    <link charset="UTF-8"  rel="stylesheet" type="text/css" th:href="@{easyui/themes/bootstrap/easyui.css}" />
+    <script type="text/javascript" th:src="@{easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{easyui/jquery.easyui.min.js}"></script>
+</head>
+<body class="easyui-layout">
+    <!--/*@thymesVar id="aa" type="java"*/-->
+    <p th:text = "${aa}"></p>
+    <div data-options="region:'west',title:'导航',split:true" style="width:330px;">
+        <div id="aa" class="easyui-accordion" data-options="fit:true,selected:1,border:false" style="width:300px;height:200px;">
+            <div title="对账信息" data-options="iconCls:'icon-save'" style="overflow:auto;padding:10px;">
+                <ul id="yltree" ></ul>
+            </div>
+        </div>
+    </div>
+    <div id = 'content' data-options="region:'center',title:'内容'" style="padding:5px;background:#eee;">
+        <!--<iframe id = "ife" src=""  width="100%" height="97%" scrolling="no" frameborder="0"></iframe>-->
+        <iframe id = "ife" src=""  width="100%" height="97%" scrolling="no" frameborder="0"></iframe>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            var path = "<%=basePath%>";
+            $('#yltree').tree({
+                lines : true,
+                data: [{
+                    id : 'upload_1',
+                    text: '上传银联钱包excel'
+                },
+                    {
+                        id : 'aoti_1',
+                        text: '杭州奥体支付信息'
+                    },
+                    {
+                        id : 'ys_parkPayInfo_1',
+                        text: '停车场支付数据'
+                    },
+                    {
+                        id : 'yl_1',
+                        text: '银联（代扣、钱包、applePay、在线）对账列表',
+                        state: 'closed',
+                        children: [{
+                            id : 'yl_2',
+                            text: '三方对账成功数据'
+                        },{
+                            id : 'yl_3',
+                            text: '停车场、一咻对账成功数据'
+                        },{
+                            id : 'yl_4',
+                            text: '停车场、一咻对账不完全成功数据'
+                        },{
+                            id : 'yl_5',
+                            text: '停车场、一咻对账失败数据'
+                        },{
+                            id : 'yl_6',
+                            text: '支付渠道、一咻对账成功数据'
+                        },{
+                            id : 'yl_7',
+                            text: '支付渠道、一咻对账不完全成功数据'
+                        },{
+                            id : 'yl_8',
+                            text: '支付渠道、一咻对账失败数据'
+                        }]
+                    },
+                    {
+                        id: 'zs_1',
+                        text: '招商代扣对账列表',
+                        state: 'closed',
+                        children: [{
+                            id : 'zs_2',
+                            text: '三方对账成功数据'
+                        },{
+                            id : 'zs_3',
+                            text: '停车场、一咻对账成功数据'
+                        },{
+                            id : 'zs_4',
+                            text: '停车场、一咻对账不完全成功数据'
+                        },{
+                            id : 'zs_5',
+                            text: '停车场、一咻对账失败数据'
+                        },{
+                            id : 'zs_6',
+                            text: '支付渠道、一咻对账成功数据'
+                        },{
+                            id : 'zs_7',
+                            text: '支付渠道、一咻对账不完全成功数据'
+                        },{
+                            id : 'zs_8',
+                            text: '支付渠道、一咻对账失败数据'
+                        }]
+                    },
+                    {
+                        id: 'qy_1',
+                        text: '银联权益对账列表',
+                        state: 'closed',
+                        children: [{
+                            id : 'qy_2',
+                            text: '三方对账成功数据'
+                        },{
+                            id : 'qy_3',
+                            text: '停车场、一咻对账成功数据'
+                        },{
+                            id : 'qy_4',
+                            text: '停车场、一咻对账不完全成功数据'
+                        },{
+                            id : 'qy_5',
+                            text: '停车场、一咻对账失败数据'
+                        },{
+                            id : 'qy_6',
+                            text: '支付渠道、一咻对账成功数据'
+                        },{
+                            id : 'qy_7',
+                            text: '支付渠道、一咻对账不完全成功数据'
+                        },{
+                            id : 'qy_8',
+                            text: '支付渠道、一咻对账失败数据'
+                        }]
+                    },
+                    {
+                        id : 'ys_1',
+                        text: '银商（微信、支付宝）对账列表',
+                        state: 'closed',
+                        children: [{
+                            id : 'ys_2',
+                            text: '银商、停车场对账成功数据'
+                        },{
+                            id : 'ys_3',
+                            text: '银商、停车场对账不完全成功数据'
+                        },{
+                            id : 'ys_4',
+                            text: '银商、停车场对账失败数据'
+                        }]
+                    }
+                ],
+                onClick: function(node){
+                    if(node.id=='upload_1'){
+                        $('#ife').attr("src","goUploadExcelView");
+                    }else if(node.id=='aoti_1'){
+                        $('#ife').attr("src","goHangZhouAoTiView");
+                    }else if(node.id=='ys_parkPayInfo_1'){
+                        $('#ife').attr("src","ysParkPayInfo");
+                    }else
+                    if(node.id=='yl_2'){
+                        $('#ife').attr("src","yl_1");
+                    }else if(node.id=='yl_3'){
+                        $('#ife').attr("src","yl_2");
+                    }else if(node.id=='yl_4'){
+                        $('#ife').attr("src","yl_3");
+                    }else if(node.id=='yl_5'){
+                        $('#ife').attr("src","yl_4");
+                    }else if(node.id=='yl_6'){
+                        $('#ife').attr("src","yl_5");
+                    }else if(node.id=='yl_7'){
+                        $('#ife').attr("src","yl_6");
+                    }else if(node.id=='yl_8'){
+                        $('#ife').attr("src","yl_7");
+                    }
+                    else if(node.id=='ys_2'){
+                        $('#ife').attr("src","ys_1");
+                    }else if(node.id=='ys_3'){
+                        $('#ife').attr("src","ys_2");
+                    }else if(node.id=='ys_4'){
+                        $('#ife').attr("src","ys_3");
+                    }
+                    else if(node.id=='zs_2'){
+                        $('#ife').attr("src","zs_1");
+                    }else if(node.id=='zs_3'){
+                        $('#ife').attr("src","zs_2");
+                    }else if(node.id=='zs_4'){
+                        $('#ife').attr("src","zs_3");
+                    }else if(node.id=='zs_5'){
+                        $('#ife').attr("src","zs_4");
+                    }else if(node.id=='zs_6'){
+                        $('#ife').attr("src","zs_5");
+                    }else if(node.id=='zs_7'){
+                        $('#ife').attr("src","zs_6");
+                    }else if(node.id=='zs_8'){
+                        $('#ife').attr("src","zs_7");
+                    }
+                    else if(node.id=='qy_2'){
+                        $('#ife').attr("src","qy_1");
+                    }else if(node.id=='qy_3'){
+                        $('#ife').attr("src","qy_2");
+                    }else if(node.id=='qy_4'){
+                        $('#ife').attr("src","qy_3");
+                    }else if(node.id=='qy_5'){
+                        $('#ife').attr("src","qy_4");
+                    }else if(node.id=='qy_6'){
+                        $('#ife').attr("src","qy_5");
+                    }else if(node.id=='qy_7'){
+                        $('#ife').attr("src","qy_6");
+                    }else if(node.id=='qy_8'){
+                        $('#ife').attr("src","qy_7");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

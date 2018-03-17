@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reconciliation.dao.YlMapper">
+
+
+    <!-- 查询总支付表中数据  银联钱包、applePay、银联在线 -->
+    <select id="getParkrecordInfo" resultType="java.util.Map" parameterType="java.util.Map">
+        select cRecordId,parkid,plateNum,originalAmount,recordAmount,couponamount,paytype,pRecordId,createtime,'' dkid,recordStatus from base_parkrecord_list
+        where parkid = #{parkId} and recordstatus is not null and endTime BETWEEN #{beginDate} and #{endDate}
+        and paytype in('UnionPay','ApplePay','UnionpayWallet') ORDER BY createtime ASC
+    </select>
+
+    <!-- 查询 银联代扣对账信息   银联代收对账信息在银联代扣表中 -->
+    <select id="getBindUnionPay" resultType="java.util.Map" parameterType="java.util.Map">
+        select bpl.cRecordId,bpl.parkid,bpl.plateNum,bpl.originalAmount,bpl.recordAmount,bpl.couponamount,bpl.paytype,bpl.pRecordId,bpl.createtime,bbual.id dkid,bpl.recordStatus
+        from base_parkrecord_list bpl INNER JOIN base_bind_unionpay_autopay_log bbual on bpl.crecordid = bbual.pay_id
+        where  parkId = #{parkId} and  bbual.create_time BETWEEN #{beginDate} and #{endDate}  and bbual.is_succ_pay = 1
+        and bpl.paytype = 'UnionAutoPay' and bpl.recordstatus is not null
+    </select>
+
+    <!-- 获取停车场不需要对账的数据，进行排除 -->
+    <select id="excludeNoReconciliation" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT  pRecordId FROM    base_parkrecord_list where createtime BETWEEN #{beginDate} and #{endDate} and parkId = #{parkId}
+        and paytype not in('UnionPay','ApplePay','UnionpayWallet','UnionAutoPay')
+    </select>
+
+	<!-- 获取某一天中天一六号岗的天一积分有几笔和多少积分 -->
+    <select id="getTianYiJiFen" resultType="java.util.Map" parameterType="java.util.Map">
+        select sum(originalAmount) tianyi_originalAmount,count(1) tianyi_mun from base_parkrecord_list
+        where parkId = #{parkId} and recordstatus is not null and endTime BETWEEN #{beginDate} and #{endDate} and paytype ='CouponPay' ORDER BY createtime ASC
+    </select>
+
+    <!-- 查询停车场和一咻不一致的数据   代扣数据 -->
+    <select id="getDisagreeData_dk" parameterType="java.util.Map" resultType="java.util.Map">
+          select bpl.cRecordId,bpl.parkid,bpl.plateNum,bpl.paytype,bpl.pRecordId,bpl.createtime,bbual.id dkid,bbual.is_succ_pay,bbual.pay_remark,bbual.query_remark
+          from base_parkrecord_list bpl INNER JOIN base_bind_unionpay_autopay_log bbual on bpl.crecordid = bbual.pay_id where  parkId = #{parkId}
+          and  bbual.create_time BETWEEN #{beginDate} and #{endDate} and bpl.paytype = 'UnionAutoPay'
+          and bpl.recordstatus is not null and bpl.precordid = #{precordid} and bbual.is_repay = 0
+    </select>
+
+    <!--  查询停车场和一咻不一致的数据   总支付表数据  优惠卷形式 -->
+    <select id="getDisagreeData_zzf_yhj" parameterType="java.util.Map" resultType="java.util.Map">
+        select createtime,paytype,platenum,crecordid,precordid from base_parkrecord_list
+        where parkId = #{parkId} and createtime BETWEEN #{beginDate} and #{endDate} and recordstatus is not null and precordid = #{precordid}
+    </select>
+
+    <!--  查询停车场和一咻不一致的数据   总支付表数据  微信支付或支付宝 -->
+    <select id="getDisagreeData_zzf_weixinzhifubao" parameterType="java.util.Map" resultType="java.util.Map">
+       select createtime,paytype,platenum,crecordid from base_parkrecord_list
+       where platenum = #{plateNum} and createtime BETWEEN #{beginDate} and #{endDate}
+       and originalAmount = #{park_originalAmount} and recordAmount = #{park_recordAmount}
+    </select>
+
+
+</mapper>

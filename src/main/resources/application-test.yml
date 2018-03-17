@@ -1,0 +1,73 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /rec
+
+#alibaba的druid数据库连接池配置
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://121.196.222.188:3306/wqs-test?useUnicode=true&characterEncoding=utf8
+        username: root
+        password: cabin8879576
+        # 使用druid数据源
+        filters: stat
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+    thymeleaf:
+        mode: LEGACYHTML5
+        prefix: classpath:/templates/
+        suffix: .html
+        encoding: UTF-8
+        cache: false
+
+
+#spring data jpa 数据源配置
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/mydb
+#    username: root
+#    password: root
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+#  type-aliases-package: com.weixin.pojo
+#  config-location: classpath:mapping/mybatis-config.xml
+
+
+#日志配置
+logging:
+  config: classpath:logback.xml
+
+
+config:
+  ftp_filePath: D://FtpFile//park//
+  #1.银联代收   2.银联权益     3.applyPay 4.银联在线
+  commercialCode: 898330275230083,898330275230086,898330275230081,898330275230082
+  account_filePath: D:\\
+  account_filePath_prefix: INN
+  account_filePath_suffix: 88ZM_
+  #读取招商对账单信息
+  zs_filePath: D:\\FtpFile\\bank\\cmb_bank
+  zs_filePath_prefix: A10297-
+  zs_filePath_suffix: .CMMX
+  #一咻的银联代收商户代码,#一咻的银联权益商户代码,#一咻的银联applepay代码,#一咻的银联主动支付，银联在线支付代码
+  signCert: D:/certs/chinaums_unionpay_autopay.pfx,D:/certs/nojumpPrivateKey.pfx,D:/certs/applepayPrivateKey.pfx,D:/certs/chinaums_unionpay.pfx
+  #调用支付渠道接口，文件下载的盘符
+  drive_path: D:\\
