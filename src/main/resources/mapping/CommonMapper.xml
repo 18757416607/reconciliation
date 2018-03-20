@@ -57,4 +57,13 @@
       select pRecordId,paytype from base_parkrecord_list where pRecordId IN (#{pRecordIdList})
     </select>
 
+    <!-- 查看银联代扣记录是否存在 -->
+    <select id="findUnionAutoPayRecordIsExist" resultType="java.util.Map">
+        SELECT id orderid,DATE_FORMAT(create_time,'%Y%m%d%H%i%S') paytime,'898330275230083' mid FROM base_bind_unionpay_autopay_log
+        where pay_id = (
+        select cRecordId from base_parkrecord_list
+        where pRecordId = #{pRecordId} and parkid = #{parkid} limit 1)  and is_repay = 0
+    </select>
+
+
 </mapper>

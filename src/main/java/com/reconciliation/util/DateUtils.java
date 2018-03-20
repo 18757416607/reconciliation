@@ -754,7 +754,8 @@ public class DateUtils {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println(getCurrDateTimeStr());
+			String s = "2018-03-18 20:22:13.780000";
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

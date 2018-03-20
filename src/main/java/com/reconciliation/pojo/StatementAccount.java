@@ -17,75 +17,131 @@ public class StatementAccount {
 	private String tradeTime;        //交易时间
 	private String status;           //记账状态
 	private String explain;          //状态说明
-	
-	
+	private String orderid;
+	private String paytime;
+	private String mid;
+
+
 	public Integer getpRecordId() {
 		return pRecordId;
 	}
+
 	public void setpRecordId(Integer pRecordId) {
 		this.pRecordId = pRecordId;
 	}
+
 	public Integer getParkId() {
 		return parkId;
 	}
+
 	public void setParkId(Integer parkId) {
 		this.parkId = parkId;
 	}
+
 	public String getPlateNum() {
 		return plateNum;
 	}
+
 	public void setPlateNum(String plateNum) {
 		this.plateNum = plateNum;
 	}
+
 	public Double getOriginalAmount() {
 		return originalAmount;
 	}
+
 	public void setOriginalAmount(Double originalAmount) {
 		this.originalAmount = originalAmount;
 	}
+
 	public Double getRecordAmount() {
 		return recordAmount;
 	}
+
 	public void setRecordAmount(Double recordAmount) {
 		this.recordAmount = recordAmount;
 	}
+
 	public Double getCouponamount() {
 		return couponamount;
 	}
+
 	public void setCouponamount(Double couponamount) {
 		this.couponamount = couponamount;
 	}
+
 	public String getTradeDate() {
 		return tradeDate;
 	}
+
 	public void setTradeDate(String tradeDate) {
 		this.tradeDate = tradeDate;
 	}
+
 	public String getTradeTime() {
 		return tradeTime;
 	}
+
 	public void setTradeTime(String tradeTime) {
 		this.tradeTime = tradeTime;
 	}
+
 	public String getStatus() {
 		return status;
 	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 	public String getExplain() {
 		return explain;
 	}
+
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
+
+	public String getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
+	}
+
+	public String getPaytime() {
+		return paytime;
+	}
+
+	public void setPaytime(String paytime) {
+		this.paytime = paytime;
+	}
+
+	public String getMid() {
+		return mid;
+	}
+
+	public void setMid(String mid) {
+		this.mid = mid;
+	}
+
 	@Override
 	public String toString() {
-		return "StatementAccount [pRecordId=" + pRecordId + ", parkId=" + parkId + ", plateNum=" + plateNum
-				+ ", originalAmount=" + originalAmount + ", recordAmount=" + recordAmount + ", couponamount="
-				+ couponamount + ", tradeDate=" + tradeDate + ", tradeTime=" + tradeTime + ", status=" + status
-				+ ", explain=" + explain + "]";
+		return "StatementAccount{" +
+				"pRecordId=" + pRecordId +
+				", parkId=" + parkId +
+				", plateNum='" + plateNum + '\'' +
+				", originalAmount=" + originalAmount +
+				", recordAmount=" + recordAmount +
+				", couponamount=" + couponamount +
+				", tradeDate='" + tradeDate + '\'' +
+				", tradeTime='" + tradeTime + '\'' +
+				", status='" + status + '\'' +
+				", explain='" + explain + '\'' +
+				", orderid='" + orderid + '\'' +
+				", paytime='" + paytime + '\'' +
+				", mid='" + mid + '\'' +
+				'}';
 	}
-	
-	
 }

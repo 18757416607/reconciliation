@@ -21,6 +21,7 @@ public class Config {
     private String zs_filePath_suffix;
     private String signCert;
     private String drive_path;
+    private String ys_path;
 
     public String getFtp_filePath() {
         return ftp_filePath;
@@ -102,6 +103,14 @@ public class Config {
         this.drive_path = drive_path;
     }
 
+    public String getYs_path() {
+        return ys_path;
+    }
+
+    public void setYs_path(String ys_path) {
+        this.ys_path = ys_path;
+    }
+
     @Override
     public String toString() {
         return "Config{" +
@@ -115,6 +124,7 @@ public class Config {
                 ", zs_filePath_suffix='" + zs_filePath_suffix + '\'' +
                 ", signCert='" + signCert + '\'' +
                 ", drive_path='" + drive_path + '\'' +
+                ", ys_path='" + ys_path + '\'' +
                 '}';
     }
 }

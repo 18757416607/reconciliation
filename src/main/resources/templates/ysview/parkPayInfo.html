@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>停车场支付信息</title>
-    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{easyui/themes/bootstrap/easyui.css}" />
+    <!--<link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{easyui/themes/bootstrap/easyui.css}" />
     <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap.css}" />
     <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap-datetimepicker.css}" />
     <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{bootstrap-select/css/bootstrap-select.css}" />
@@ -13,8 +13,23 @@
     <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap.js}"></script>
     <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap-datetimepicker.js}"></script>
     <script type="text/javascript" th:src="@{datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
-    <script type="text/javascript" th:src="@{bootstrap-select/js/bootstrap-select.js}"></script>
-    <style type="text/css">.panel-body{padding: 0px;}</style>
+    <script type="text/javascript" th:src="@{bootstrap-select/js/bootstrap-select.js}"></script>-->
+    <link charset="UTF-8" rel="stylesheet" type="text/css" href="../../static/easyui/themes/bootstrap/easyui.css" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" href="../../static/datetimepicker/css/bootstrap.css" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" href="../../static/datetimepicker/css/bootstrap-datetimepicker.css" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" href="../../static/bootstrap-select/css/bootstrap-select.css" />
+    <script type="text/javascript" src="../../static/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../static/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../static/datetimepicker/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../../static/datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="../../static/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap-select/js/bootstrap-select.js"></script>
+
+
+    <style type="text/css">
+        html{overflow-y:hidden}
+        .panel-body{padding: 0px;}
+    </style>
 </head>
 <body>
 <div style = "margin: 10px 15px 10px 25px;">
@@ -22,17 +37,24 @@
     <select id="park" class="selectpicker" data-live-search="true" >
         <!--/*@thymesVar id="parkList" type="java"*/-->
         <option th:each="item,iterStat:${parkList}" th:text="${item.parkname}" th:value="${item.parkid}" ></option>
-    </select>
-    &nbsp;&nbsp;&nbsp;
-    开始日期：<input id = "startDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
-    结束日期：<input id = "endDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
-    <button type="button" class="btn dropdown-toggle" id="search" data-toggle="dropdown">搜索</button>
-    <span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：2018-03-16之前数据不能查看</span>
-
-    <table id = "dg" class="easyui-datagrid" style="margin-top:50px;padding: 80px;display:none"
-           data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...',emptyMsg:'no records found'">
+    </select>&nbsp;&nbsp;&nbsp;
+    <!--车牌号：
+    <input id = "platenum" size="16" type="text" class="form-control" style="width: 130px;display: inline;">&nbsp;&nbsp;&nbsp;-->
+    开始日期：<input id = "startDate" size="16" type="text" readonly class="form-control" style="width: 110px;display: inline;">&nbsp;&nbsp;&nbsp;
+    结束日期：<input id = "endDate" size="16" type="text" readonly class="form-control" style="width: 110px;display: inline;">&nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn dropdown-toggle" id="search" data-toggle="dropdown">搜索</button>&nbsp;&nbsp;
+    <button type="button" class="btn dropdown-toggle" id="down" data-toggle="dropdown">明细报表</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn dropdown-toggle" id="downAll" data-toggle="dropdown">总账报表</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <span id = "cost" style="color:red;display: none;margin-top: 20px;">应付金额总计：<span id = "originalAmount"></span>&nbsp;&nbsp;实付金额总计：<span id = "recordAmount"></span>&nbsp;&nbsp;优惠金额总计：<span id = "couponamount"></span></span>
+    <!--<span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：2018-03-18之前数据不能查看</span>-->
+    <div style="margin-top: 22px;">
+    <table id = "dg"  style="display:none;"
+           data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...'">
         <thead>
         <tr>
+            <th data-options="field:'orderid',width:100,align:'center',halign:'center'">订单编号</th>
+            <th data-options="field:'paytime',width:100,align:'center',halign:'center'">交易流水号</th>
+            <th data-options="field:'mid',width:100,align:'center',halign:'center'">商户号</th>
             <th data-options="field:'plateNum',width:100,align:'center',halign:'center'">车牌号</th>
             <th data-options="field:'originalAmount',width:100,align:'center',halign:'center'">应付金额</th>
             <th data-options="field:'recordAmount',width:100,align:'center',halign:'center'">实付金额</th>
@@ -42,6 +64,7 @@
         </tr>
         </thead>
     </table>
+    </div>
 </div>
 <script>
     $('#dg').css("height",window.innerHeight-66);
@@ -59,18 +82,80 @@
             $.messager.alert('系统消息','请选择结束日期在进行搜索!!!');
             return;
         }
-        var opts = $("#dg").datagrid("options");
-        opts.url = "getParkPayInfo";
-        opts.emptyMsg = "没欸欸欸i额";
-        $('#dg').datagrid('load', {
-            parkid: park,
-            beginDate: startDate,
-            endDate:endDate
+        $('#dg').datagrid({
+            url: 'getParkPayInfo',
+            queryParams: {
+                parkid: park,
+                beginDate: startDate,
+                endDate:endDate
+            },
+            onLoadSuccess : function(data){
+                $.ajax({
+                    url : 'getTotalCost',
+                    method : 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#cost').css("display","inline");
+                        $('#originalAmount').html(data.originalAmount);
+                        $('#recordAmount').html(data.recordAmount);
+                        $('#couponamount').html(data.couponamount);
+                    },
+                    error:function () {
+
+                    }
+                });
+            }
+        });
+    });
+    //导出明细报表
+    $('#down').on('click',function () {
+        var park = $('#park').val();
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        if(park==''){
+            $.messager.alert('系统消息','请选择停车场在进行导出!!!');
+            return;
+        }else if(startDate==''){
+            $.messager.alert('系统消息','请选择开始日期在进行导出!!!');
+            return;
+        }else if(endDate==''){
+            $.messager.alert('系统消息','请选择结束日期在进行导出!!!');
+            return;
+        }
+        $.messager.confirm('系统确认提示', '您确认需要导出  <span style="color: red">'+startDate+"</span>至<span style='color: red'>"+endDate+"</span>区间<span style = 'color: red;'>"+$("#park").find("option:selected").text()+"</span>停车场的数据么?", function(r){
+            if (r){
+                location.href = "downParkDetailExcel?parkid="+park+"&beginDate="+startDate+"&endDate="+endDate;
+                /*$.ajax({
+                    url:'downParkDetailExcel',
+                    method:'post',
+                    data:{
+                        parkid: park,
+                        beginDate: startDate,
+                        endDate:endDate
+                    },
+                    success: function (data) {
+                        console.info(data);
+                    },
+                    error:function (a,b,c) {
+
+                    }
+                });*/
+            }
+        });
+    });
+
+    //导出所有停车场总账报表
+    $('#downAll').on('click',function () {
+        $.messager.confirm('系统确认提示', '您确认需要导出所有停车场总账报表么?', function(r){
+            if (r){
+
+            }
         });
     });
 
 
 </script>
-<script type="text/javascript" th:src="@{datetimepicker/js/user-defined.js}"></script>
+<!--<script type="text/javascript" th:src="@{datetimepicker/js/user-defined.js}"></script>-->
+<script type="text/javascript" src="../../static/datetimepicker/js/user-defined-1.js"></script>
 </body>
 </html>

@@ -1,16 +1,19 @@
 server:
   port: 8082
-  servlet:
-    context-path: /rec
+#  servlet:
+#    context-path: /rec
 
 #alibaba的druid数据库连接池配置
 spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://121.196.222.188:3306/wqs-test?useUnicode=true&characterEncoding=utf8
-        username: root
-        password: cabin8879576
+#        url: jdbc:mysql://121.196.222.188:3306/parking?useUnicode=true&characterEncoding=utf8
+#        username: root
+#        password: cabin8879576
+        url: jdbc:mysql://10.0.1.148:3306/parking?useUnicode=true&characterEncoding=utf8
+        username: cabin
+        password: cabin8879576aA
         # 使用druid数据源
         filters: stat
         maxActive: 20
@@ -71,3 +74,4 @@ config:
   signCert: D:/certs/chinaums_unionpay_autopay.pfx,D:/certs/nojumpPrivateKey.pfx,D:/certs/applepayPrivateKey.pfx,D:/certs/chinaums_unionpay.pfx
   #调用支付渠道接口，文件下载的盘符
   drive_path: D:\\
+  ys_path: D://YsFile//

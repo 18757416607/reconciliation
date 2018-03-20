@@ -1,6 +1,7 @@
 package com.reconciliation.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -65,5 +66,13 @@ public interface CommonMapper {
      * @return
      */
     public List<Map<String,Object>> getParkList();
+
+    /**
+     * 查看银联代扣记录是否存在
+     * @param pRecordId
+     * @return
+     */
+    public Map<String,String> findUnionAutoPayRecordIsExist(@Param(value = "pRecordId") String pRecordId, @Param(value = "parkid") String parkid);
+
 
 }
