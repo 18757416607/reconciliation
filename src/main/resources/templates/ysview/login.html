@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>停车场支付信息</title>
+    <!--<link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{easyui/themes/bootstrap/easyui.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{datetimepicker/css/bootstrap-datetimepicker.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{bootstrap-select/css/bootstrap-select.css}" />
+    <script type="text/javascript" th:src="@{easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" th:src="@{bootstrap-select/js/bootstrap-select.js}"></script>-->
+    <link charset="UTF-8" rel="stylesheet" type="text/css" href="../../static/easyui/themes/bootstrap/easyui.css" />
+    <script type="text/javascript" src="../../static/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../static/easyui/jquery.easyui.min.js"></script>
+    <style type="text/css">.panel-body{padding: 0px;}</style>
+</head>
+<body>
+
+<div id="dd">
+    <form id="ff" method="post" action="ttt" style="text-align: center;margin-top: 30px;line-height: 3;">
+        <div>
+            <label for="username">用户名:</label>
+            <input class="easyui-textbox" type="text" name="username" id="username" data-options="missingMessage:'请输入用户名'" />
+        </div>
+        <div>
+            <label for="password">密&nbsp;&nbsp;&nbsp;码:</label>
+            <input class="easyui-textbox" type="password" name="password" id = "password" data-options="missingMessage:'请输入密码'" />
+        </div>
+        <div>
+            <a id="login" href="javascript:login();" class="easyui-linkbutton" data-options="" style="width: 50px;">登陆</a>
+            <a id="clear" href="javascript:clearText();" class="easyui-linkbutton" data-options="" style="width: 50px;">清空</a>
+        </div>
+    </form>
+</div>
+
+
+</body>
+<script type="text/javascript">
+    $('#dd').dialog({
+        title: '登陆 ',
+        width: 400,
+        height: 200,
+        closed: false,
+        closable:false,
+        maximizable:true,
+        minimizable:true,
+        draggable:false,
+        cache: false,
+        modal: true
+    });
+    function clearText(){
+        $("#ff").form('clear');
+    }
+    function login(){
+        var uname = $('#username').textbox("getValue");
+        var password =$('#password').textbox("getValue");
+        if(uname==''){
+            $.messager.show({
+                title:'系统消息',
+                msg:'用户名不能为空',
+                timeout:3000,
+                showType:'slide'
+            });
+            return false;
+        }
+        if(password==''){
+            $.messager.show({
+                title:'系统消息',
+                msg:'密码不能为空',
+                timeout:3000,
+                showType:'slide'
+            });
+            return false;
+        }
+        if(uname=='yinshang'&&password=='123456'/*||uname=='cabin'*/){
+            $.ajax({
+                url : 'loginCheck',
+                data : {
+                    username:uname,
+                    password:password
+                },
+                success:function(data){
+                    if(data==''){
+                        $.messager.show({
+                            title:'系统消息',
+                            msg:'用户名或密码错误',
+                            timeout:3000,
+                            showType:'slide'
+                        });
+                    }else if(data=='00'){
+                        location.href = "ysParkPayInfo";
+                    }
+                },
+                error:function (a,b,c) {
+                    $.messager.show({
+                        title:'系统消息',
+                        msg:'系统异常,联系工作人员',
+                        timeout:3000,
+                        showType:'slide'
+                    });
+                }
+            });
+        }else{
+            $.messager.show({
+                title:'系统消息',
+                msg:'用户名错误',
+                timeout:3000,
+                showType:'slide'
+            });
+        }
+    }
+</script>
+</html>
