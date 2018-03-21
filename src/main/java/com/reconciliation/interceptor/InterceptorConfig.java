@@ -23,6 +23,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(new JurisdictionInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login")
+                .excludePathPatterns("/loginCheck")
                 .excludePathPatterns("/static/**")
                 .excludePathPatterns("/templates/**");
         super.addInterceptors(registry);

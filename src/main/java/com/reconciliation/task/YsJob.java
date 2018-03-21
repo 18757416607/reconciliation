@@ -72,7 +72,7 @@ public class YsJob {
      0 10 3 ? * 1    每周星期天，3点10分 执行，注：1表示星期天
      0 10 3 ? * 1#3  每个月的第三个星期，星期天 执行，#号只能出现在星期的位置
      */
-    @Scheduled(cron="0 04 0 * * ?")
+    @Scheduled(cron="0 10 0 * * ?")
     public void ysJob() throws  Exception{
         //读取数据库连接信息
         logger.info(DateUtils.formatYYYYMMDDHHMMSS() + "==>" + "开始获取停车场费用信息写到服务器上");
@@ -187,9 +187,8 @@ public class YsJob {
         }
     }
 
-    @Scheduled(cron="0 28 4 * * ?")
+    @Scheduled(cron="0 20 0 * * ?")
     public void ysFptJob() throws  Exception{
-        for(int m = 2;m<=79;m++){
         //读取FTP文件
         List<Map<String, Object>> pytoolParkClient = commonMapper.getPytoolParkClientAll();
         for (int i = 0; i < pytoolParkClient.size(); i++) {
@@ -197,8 +196,8 @@ public class YsJob {
             Map<String, Object> temp = pytoolParkClient.get(i);
             if (temp.get("isSearch").equals("1")) { //'停车场是否可读取数据库或FTP   0:否 1:是
                 if (temp.get("isFpt").toString().split(",")[1].equals("0")) {  //'区分供应商对账数据  0:读取fpt的txt   1:读取数据库',
-                    String beginDate = DateUtils.format(DateUtils.addOneDay(new Date(), -m));
-                    String endDate = DateUtils.format(DateUtils.addOneDay(new Date(), -m));
+                    String beginDate = DateUtils.format(DateUtils.addOneDay(new Date(), -1));
+                    String endDate = DateUtils.format(DateUtils.addOneDay(new Date(), -1));
                     Map<String, Object> ftpMap = null;
                     try{
                         ftpMap = fileUtil.readFileByLines(config,temp.get("parkId").toString(),temp.get("parkNameAbbreviation").toString(),beginDate,endDate,null);
@@ -235,7 +234,7 @@ public class YsJob {
                             writeMap.put("chargeKind",statementAccount.getExplain());
                             writeList.add(writeMap);
                         }
-                        String date = DateUtils.formatDate(DateUtils.format(DateUtils.addOneDay(new Date(), -m)));
+                        String date = DateUtils.formatDate(DateUtils.format(DateUtils.addOneDay(new Date(), -1)));
                         fileUtil.writeToFile(config,writeList,temp.get("parkId").toString(),temp.get("parkNameAbbreviation").toString(),date);
                     }catch (Exception e){
                         continue;
@@ -243,8 +242,6 @@ public class YsJob {
 
                 }
             }
-        }
-
         }
 
     }

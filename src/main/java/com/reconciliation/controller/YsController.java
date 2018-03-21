@@ -3,6 +3,7 @@ package com.reconciliation.controller;
 import com.alibaba.fastjson.JSON;
 import com.reconciliation.pojo.Result;
 import com.reconciliation.pojo.StatementAccount;
+import com.reconciliation.pojo.User;
 import com.reconciliation.service.CommonService;
 import com.reconciliation.service.YsService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,11 @@ public class YsController {
 
     @RequestMapping(value = "/loginCheck")
     @ResponseBody
-    public String loginCheck(){
+    public String loginCheck(HttpServletRequest request,User user){
+        HttpSession session = request.getSession();
+        if(user.getUsername().equals("yinshang")&&user.getPassword().equals("123456")){
+            session.setAttribute("user",user);
+        }
         return "00";
     }
 

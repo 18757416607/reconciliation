@@ -1,5 +1,6 @@
 package com.reconciliation.interceptor;
 
+import com.reconciliation.pojo.User;
 import org.apache.catalina.Session;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -20,23 +21,18 @@ public class JurisdictionInterceptor implements HandlerInterceptor{
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        /*String username = request.getParameter("username");
-        String password = request.getParameter("password");
         HttpSession session = request.getSession();
-        session.setAttribute("username",username);
-        session.setAttribute("password",password);
-        String un = session.getAttribute("username").toString();
-        String ps = session.getAttribute("password").toString();
-        boolean flag = false;
-        if(un.equals("yinshang")&&ps.equals("123456")){
-            flag = true;
+        User user = (User)session.getAttribute("user");
+        if(user==null){
+            response.sendRedirect(request.getContextPath()+"/login");
+            return false;
+        }else{
+            if(user.getUsername().equals("yinshang")&&user.getPassword().equals("123456")){
+                return true;
+            }
         }
-        if(username.equals("cabin")&&password.equals("cabin159357")){
-            flag = true;
-        }
-        System.out.println(flag+">>>>>>");
-        return flag;*/
-        return true;
+        response.sendRedirect(request.getContextPath()+"/login");
+        return false;
     }
 
     /**

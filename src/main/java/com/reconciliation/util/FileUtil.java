@@ -577,8 +577,9 @@ public class FileUtil {
 		BufferedReader reader = null;
 		List<StatementAccount> list = new ArrayList<StatementAccount>();
 		Map<String, Object> oneParkAllInfo = new HashMap<String, Object>();
+		for (int i = 0; i < days + 1; i++) {
 		try {
-			for (int i = 0; i < days + 1; i++) {
+
 				String fileName1 = initFileName;
 				System.out.println(fileName);
 				file = new FileInputStream(fileName);
@@ -654,21 +655,22 @@ public class FileUtil {
 					fileName = fileName1 + DateUtils.formatYYYYMMDD(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
 				}
 
-			}
+
 			oneParkAllInfo.put("list", list);
 			reader.close();
 		} catch (IOException e) {
 			logger.info(e.getMessage());
-			return null;
+			continue;
 		} finally {
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (IOException e1) {
 					logger.info(e1.getMessage());
-					return null;
+					continue;
 				}
 			}
+		}
 		}
 		return oneParkAllInfo;
 	}

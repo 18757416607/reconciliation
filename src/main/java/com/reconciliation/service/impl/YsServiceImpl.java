@@ -47,9 +47,9 @@ public class YsServiceImpl implements YsService {
         Map<String,Object> map = new HashMap<String,Object>();
         FileUtil fileUtil = new FileUtil();
         Map<String,Object> parkClient = commonMapper.getOnePytoolParkClient(parkid);
-        if(parkClient.get("isFpt").toString().split(",")[1].equals("1")){//'区分供应商对账数据  0:读取fpt的txt   1:读取数据库',
+        //if(parkClient.get("isFpt").toString().split(",")[1].equals("1")){//'区分供应商对账数据  0:读取fpt的txt   1:读取数据库',
             config.setFtp_filePath(config.getYs_path());
-        }
+        //}
         List<StatementAccount> list = (List<StatementAccount>)fileUtil.readFileByLines_ys(config,parkid,parkClient.get("parkNameAbbreviation").toString(),beginDate,endDate,null).get("list");
         double originalAmount = 0; //应付金额
         double recordAmount = 0; //实付金额
@@ -94,6 +94,11 @@ public class YsServiceImpl implements YsService {
             for(int i = 0;i<list.size();i++){
                 StatementAccount statementAccount = list.get(i);
                 String date = statementAccount.getTradeDate();
+                if(statementAccount.getOrderid().equals("00")){
+                    statementAccount.setOrderid("");
+                    statementAccount.setPaytime("");
+                    statementAccount.setMid("");
+                }
                 statementAccount.setTradeDate(date.substring(0,date.lastIndexOf(":")+3));
                 originalAmount += list.get(i).getOriginalAmount();
                 recordAmount += list.get(i).getRecordAmount();
@@ -129,12 +134,6 @@ public class YsServiceImpl implements YsService {
                     }
                     String newBeginDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/beginDate+" 00:00:00";
                     String newEndDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/endDate+" 23:59:59";
-                   /* List<StatementAccount> list = null;
-                    try{
-                        list = (List<StatementAccount>)fileUtil.readFileByLines1(config,parkClient.get("parkId").toString(),parkClient.get("parkNameAbbreviation").toString(),beginDate,endDate,null).get("list");
-                    }catch (Exception e){
-                        continue;
-                    }*/
                     List<StatementAccount> list = (List<StatementAccount>)fileUtil.readFileByLines1(config,parkClient.get("parkId").toString(),parkClient.get("parkNameAbbreviation").toString(),beginDate,endDate,null).get("list");
                     double originalAmount = 0; //应付金额
                     double recordAmount = 0; //实付金额
