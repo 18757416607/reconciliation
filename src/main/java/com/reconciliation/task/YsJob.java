@@ -3,6 +3,7 @@ package com.reconciliation.task;
 import com.alibaba.fastjson.JSONObject;
 import com.reconciliation.dao.CommonMapper;
 import com.reconciliation.pojo.Config;
+import com.reconciliation.pojo.StatementAccount;
 import com.reconciliation.util.DateUtils;
 import com.reconciliation.util.FileUtil;
 import com.reconciliation.util.UrlConnectUtil;
@@ -73,6 +74,7 @@ public class YsJob {
      */
     @Scheduled(cron="0 04 0 * * ?")
     public void ysJob() throws  Exception{
+        //读取数据库连接信息
         logger.info(DateUtils.formatYYYYMMDDHHMMSS() + "==>" + "开始获取停车场费用信息写到服务器上");
         List<Map<String, Object>> pytoolParkClient = commonMapper.getPytoolParkClientAll();
         for (int i = 0; i < pytoolParkClient.size(); i++) {
@@ -185,14 +187,67 @@ public class YsJob {
         }
     }
 
+    @Scheduled(cron="0 28 4 * * ?")
+    public void ysFptJob() throws  Exception{
+        for(int m = 2;m<=79;m++){
+        //读取FTP文件
+        List<Map<String, Object>> pytoolParkClient = commonMapper.getPytoolParkClientAll();
+        for (int i = 0; i < pytoolParkClient.size(); i++) {
+            FileUtil fileUtil = new FileUtil();
+            Map<String, Object> temp = pytoolParkClient.get(i);
+            if (temp.get("isSearch").equals("1")) { //'停车场是否可读取数据库或FTP   0:否 1:是
+                if (temp.get("isFpt").toString().split(",")[1].equals("0")) {  //'区分供应商对账数据  0:读取fpt的txt   1:读取数据库',
+                    String beginDate = DateUtils.format(DateUtils.addOneDay(new Date(), -m));
+                    String endDate = DateUtils.format(DateUtils.addOneDay(new Date(), -m));
+                    Map<String, Object> ftpMap = null;
+                    try{
+                        ftpMap = fileUtil.readFileByLines(config,temp.get("parkId").toString(),temp.get("parkNameAbbreviation").toString(),beginDate,endDate,null);
+                        /*Map<String, Object> ftpMap = fileUtil.readFileByLines(config,temp.get("parkId").toString(),temp.get("parkNameAbbreviation").toString(),beginDate,endDate,null);*/
+                        List<StatementAccount> statementAccountList = (List<StatementAccount>)ftpMap.get("list");
+                        List<Map<String,Object>> writeList = new ArrayList<Map<String,Object>>();
+                        for(int j = 0;j<statementAccountList.size();j++){
+                            StatementAccount statementAccount =  statementAccountList.get(j);
+                            Map<String,Object> writeMap = new HashMap<String,Object>();
+                            if (statementAccount.getpRecordId() != null && !"".equals(statementAccount.getpRecordId()) && !"空".equals(statementAccount.getpRecordId())) {
+                                Map<String, String> tempMap = commonMapper.findUnionAutoPayRecordIsExist(statementAccount.getpRecordId().toString(), temp.get("parkId").toString());
+                                if (tempMap != null) {
+                                    writeMap.put("orderid",tempMap.get("orderid"));
+                                    writeMap.put("paytime",tempMap.get("paytime"));
+                                    writeMap.put("mid",tempMap.get("mid"));
+                                }else{
+                                    writeMap.put("orderid","00");
+                                    writeMap.put("paytime","00");
+                                    writeMap.put("mid","00");
+                                }
+                            }else{
+                                writeMap.put("orderid","00");
+                                writeMap.put("paytime","00");
+                                writeMap.put("mid","00");
+                            }
+                            writeMap.put("pid",statementAccount.getpRecordId());
+                            writeMap.put("parkid",statementAccount.getParkId());
+                            writeMap.put("plateNo",statementAccount.getPlateNum());
+                            writeMap.put("payCharge",statementAccount.getOriginalAmount());
+                            writeMap.put("realCharge",statementAccount.getRecordAmount());
+                            writeMap.put("discount",statementAccount.getCouponamount());
+                            writeMap.put("chargeTime",DateUtils.convertDateFormat(statementAccount.getTradeDate()+statementAccount.getTradeTime()));
+                            writeMap.put("state",statementAccount.getStatus());
+                            writeMap.put("chargeKind",statementAccount.getExplain());
+                            writeList.add(writeMap);
+                        }
+                        String date = DateUtils.formatDate(DateUtils.format(DateUtils.addOneDay(new Date(), -m)));
+                        fileUtil.writeToFile(config,writeList,temp.get("parkId").toString(),temp.get("parkNameAbbreviation").toString(),date);
+                    }catch (Exception e){
+                        continue;
+                    }
 
-    public static void main(String[] args) {
-        for(int i = 1;i<=78;i++){
-            String beginDate = DateUtils.format(DateUtils.addOneDay(new Date(), -i)) + " 00:00:00";
-            String endDate = DateUtils.format(DateUtils.addOneDay(new Date(), -i)) + " 23:59:59";
-            System.out.println(beginDate+"~~~~"+endDate);
-            System.out.println("_____________________");
+                }
+            }
         }
+
+        }
+
     }
+
 
 }

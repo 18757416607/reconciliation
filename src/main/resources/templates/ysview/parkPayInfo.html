@@ -146,9 +146,18 @@
 
     //导出所有停车场总账报表
     $('#downAll').on('click',function () {
-        $.messager.confirm('系统确认提示', '您确认需要导出所有停车场总账报表么?', function(r){
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        if(startDate==''){
+            $.messager.alert('系统消息','请选择开始日期在进行导出!!!');
+            return;
+        }else if(endDate==''){
+            $.messager.alert('系统消息','请选择结束日期在进行导出!!!');
+            return;
+        }
+        $.messager.confirm('系统确认提示', '您确认需要导出<span style="color: red">'+startDate+'</span>至<span style="color: red">'+endDate+'</span>所有停车场总账报表么?', function(r){
             if (r){
-
+                location.href = "downParkAllExcel?beginDate="+startDate+"&endDate="+endDate;
             }
         });
     });

@@ -123,31 +123,39 @@ public class YsServiceImpl implements YsService {
             List<Map<String,Object>> moenyList = new ArrayList<Map<String,Object>>();
             for(int j = 0;j<parkClientList.size();j++){
                 Map<String,Object> parkClient = parkClientList.get(j);
-                if(parkClient.get("isFpt").toString().split(",")[1].equals("1")){//'区分供应商对账数据  0:读取fpt的txt   1:读取数据库',
-                    config.setFtp_filePath(config.getYs_path());
+                if(parkClient.get("isSearch").toString().equals("1")){
+                    if(parkClient.get("isFpt").toString().split(",")[1].equals("1")){//'区分供应商对账数据  0:读取fpt的txt   1:读取数据库',
+                        config.setFtp_filePath(config.getYs_path());
+                    }
+                    String newBeginDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/beginDate+" 00:00:00";
+                    String newEndDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/endDate+" 23:59:59";
+                   /* List<StatementAccount> list = null;
+                    try{
+                        list = (List<StatementAccount>)fileUtil.readFileByLines1(config,parkClient.get("parkId").toString(),parkClient.get("parkNameAbbreviation").toString(),beginDate,endDate,null).get("list");
+                    }catch (Exception e){
+                        continue;
+                    }*/
+                    List<StatementAccount> list = (List<StatementAccount>)fileUtil.readFileByLines1(config,parkClient.get("parkId").toString(),parkClient.get("parkNameAbbreviation").toString(),beginDate,endDate,null).get("list");
+                    double originalAmount = 0; //应付金额
+                    double recordAmount = 0; //实付金额
+                    double couponamount = 0; //优惠金额
+                    Map<String,Object> map = new HashMap<String,Object>();
+                    for(int i = 0;i<list.size();i++){
+                        StatementAccount statementAccount = list.get(i);
+                        String date = statementAccount.getTradeDate();
+                        statementAccount.setTradeDate(date.substring(0,date.lastIndexOf(":")+3));
+                        originalAmount += list.get(i).getOriginalAmount();
+                        recordAmount += list.get(i).getRecordAmount();
+                        couponamount += list.get(i).getCouponamount();
+                    }
+                    map.put("parkName",parkClient.get("parkName"));
+                    map.put("payCharge",originalAmount);
+                    map.put("realCharge",recordAmount);
+                    map.put("discount",couponamount);
+                    moenyList.add(map);
                 }
-                String newBeginDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/beginDate+" 00:00:00";
-                String newEndDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/endDate+" 23:59:59";
-                List<StatementAccount> list = (List<StatementAccount>)fileUtil.readFileByLines_ys(config,parkClient.get("parkId").toString(),parkClient.get("parkNameAbbreviation").toString(),beginDate,endDate,null).get("list");
-                double originalAmount = 0; //应付金额
-                double recordAmount = 0; //实付金额
-                double couponamount = 0; //优惠金额
-                Map<String,Object> map = new HashMap<String,Object>();
-                for(int i = 0;i<list.size();i++){
-                    StatementAccount statementAccount = list.get(i);
-                    String date = statementAccount.getTradeDate();
-                    statementAccount.setTradeDate(date.substring(0,date.lastIndexOf(":")+3));
-                    originalAmount += list.get(i).getOriginalAmount();
-                    recordAmount += list.get(i).getRecordAmount();
-                    couponamount += list.get(i).getCouponamount();
-                }
-                map.put("parkName",parkClient.get("parkName"));
-                map.put("payCharge",originalAmount);
-                map.put("realCharge",recordAmount);
-                map.put("discount",couponamount);
-                moenyList.add(map);
             }
-            //ObjectExcelRead.getParkReconciliationExcel(request,response,moenyList,beginDate,endDate);
+            ObjectExcelRead.getParkReconciliationExcel(request,response,moenyList,beginDate,endDate);
         }catch (Exception e){
             logger.info(e.getMessage());
 

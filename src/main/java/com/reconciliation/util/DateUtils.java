@@ -754,8 +754,8 @@ public class DateUtils {
 
 	public static void main(String[] args) {
 		try {
-			String s = "2018-03-18 20:22:13.780000";
-
+			String s = "20180316165654";
+			System.out.println(DateUtils.convertDateFormat(s));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

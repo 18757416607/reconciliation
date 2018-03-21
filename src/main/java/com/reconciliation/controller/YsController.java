@@ -113,7 +113,7 @@ public class YsController {
 
 
     /**
-     * 停车场详细信息导出
+     * 所有停车场信息导出
      * @param beginDate  开始时间
      * @param endDate    结束时间
      * @param request

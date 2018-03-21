@@ -192,9 +192,9 @@ public class ObjectExcelRead {
 		int days = DateUtils.differentDaysByMillisecond(DateUtils.format(beginDate), DateUtils.format(endDate)); // 间隔天数
 		String fileName = null;
 		if(days>0){
-			fileName = "attachment;filename=\"" + /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/DateUtils.format(DateUtils.format(beginDate))+"至"+DateUtils.format(DateUtils.format(endDate)) + "停车场对账单明细.xls" + "\"";
+			fileName = "attachment;filename=\"" + /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/DateUtils.format(DateUtils.format(beginDate))+"至"+DateUtils.format(DateUtils.format(endDate)) + "停车场对账单明细报表.xls" + "\"";
 		}else{
-			fileName = "attachment;filename=\"" + DateUtils.format(DateUtils.format(beginDate)) + "停车场对账单明细.xls" + "\"";
+			fileName = "attachment;filename=\"" + DateUtils.format(DateUtils.format(beginDate)) + "停车场对账单明细报表.xls" + "\"";
 		}
 
 		response.setHeader("Content-disposition", new String(fileName.getBytes("UTF-8"), "ISO-8859-1"));
@@ -213,7 +213,7 @@ public class ObjectExcelRead {
 	 * @param response
 	 * @throws Exception
 	 */
-	public static void getParkReconciliationExcel(HttpServletRequest request, HttpServletResponse response, List<Map<String,Object>> moenyList) throws  Exception{
+	public static void getParkReconciliationExcel(HttpServletRequest request, HttpServletResponse response, List<Map<String,Object>> moenyList,String beginDate,String endDate) throws  Exception{
 		String serpath = PathUtil.getClassResources() + "static/uploadFiles/停车场对账单.xls";
 		FileInputStream fs= new FileInputStream(serpath);  //获取d://test.xls
 		POIFSFileSystem ps= new POIFSFileSystem(fs);  //使用POI提供的方法得到excel的信息
@@ -273,7 +273,13 @@ public class ObjectExcelRead {
 		}
 
 		response.reset();
-		String fileName = "attachment;filename=\"" + DateUtils.format(DateUtils.addOneDay(new Date(),-1)) + "停车场对账单.xls" + "\"";
+		int days = DateUtils.differentDaysByMillisecond(DateUtils.format(beginDate), DateUtils.format(endDate)); // 间隔天数
+		String fileName = null;
+		if(days>0){
+			fileName = "attachment;filename=\"" + /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/DateUtils.format(DateUtils.format(beginDate))+"至"+DateUtils.format(DateUtils.format(endDate)) + "停车场对账单总账报表.xls" + "\"";
+		}else{
+			fileName = "attachment;filename=\"" + DateUtils.format(DateUtils.format(beginDate)) + "停车场对账单总账报表.xls" + "\"";
+		}
 		response.setHeader("Content-disposition", new String(fileName.getBytes("UTF-8"), "ISO-8859-1"));
 		response.setContentType("application/octet-stream;charset=UTF-8");
 		OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
@@ -281,7 +287,6 @@ public class ObjectExcelRead {
 		outputStream.flush();
 		outputStream.close();
 		response.flushBuffer();
-
 	}
 
 

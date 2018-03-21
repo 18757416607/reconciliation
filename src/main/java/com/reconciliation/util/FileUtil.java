@@ -158,6 +158,150 @@ public class FileUtil {
 		return oneParkAllInfo;
 	}
 
+	/**  场景: 2018-03-01 至 2018-03-20 得数据需要读取，而一些文件不存在从而报错，不存在得文件忽略跳过继续读取下面得文件
+	 * 对账单读取文件特定方法 以行为单位读取文件，常用于读面向行的格式化文件
+	 * @param config
+	 * 			配置信息
+	 * @param parkId
+	 *            停车场id
+	 * @param folderName
+	 * 			文件名称
+	 * @param beginDate
+	 *            开始查询的日期
+	 * @param endDate
+	 *            结束查询的日期
+	 * @param cluodParkId
+	 * 			  云平台停车场编号是否为null
+	 * @return
+	 */
+	public Map<String, Object> readFileByLines1(Config config,String parkId,String folderName, String beginDate, String endDate,String cluodParkId) {
+
+		String initFileName = config.getFtp_filePath()+folderName+"//CCB_TCC_JYDZ_";
+		String fileName = config.getFtp_filePath()+folderName+"//CCB_TCC_JYDZ_";
+		Date date1 = DateUtils.format(beginDate); // 转换成date格式
+		Date date2 = DateUtils.format(endDate); // 转换成date格式
+
+		int days = DateUtils.differentDaysByMillisecond(date1, date2); // 间隔天数
+		logger.info("读取停车场为【"+parkId+"】的对账单文件，共读取【"+(days+1)+"】天！");
+
+		String tempParkId = null;
+		String tempDate = null;
+		if(StringUtils.isNotBlank(cluodParkId)){  //云平台编号为空 说明该停车场是云平台得，那么读取得FTP文件名与非云平台得不一样
+			tempParkId = cluodParkId;
+			tempDate = DateUtils.format(DateUtils.addOneDay(DateUtils.format(DateUtils.format(date1)),-1));
+		}else{
+			tempParkId = parkId;
+			tempDate = DateUtils.formatYYYYMMDD(date1); // 转换成yyyyMMdd格式
+		}
+
+		fileName = fileName + tempDate + "_" + tempParkId + ".txt"; // 组装文件名称
+		FileInputStream file = null;
+		BufferedReader reader = null;
+		List<StatementAccount> list = new ArrayList<StatementAccount>();
+		Map<String, Object> oneParkAllInfo = new HashMap<String, Object>();
+		for (int i = 0; i < days + 1; i++) {
+			String fileName1 = initFileName;
+		try {
+
+				file = new FileInputStream(fileName);
+				reader = new BufferedReader(new InputStreamReader(file, "UTF-8"));
+				String tempString = null;
+
+				int line = 1;
+				while ((tempString = reader.readLine()) != null) {
+				if (line == 2) {
+					String[] tempArr = tempString.split("\\|");
+					HashMap<String, Object> parkInfo = new HashMap<String, Object>();
+					parkInfo.put("parkId", tempArr[0]); // 停车场编号
+					parkInfo.put("copeNum", tempArr[1]); // 应付笔数
+					parkInfo.put("copeMoney", tempArr[2]); // 应付金额
+					parkInfo.put("outNum", tempArr[3]); // 实付笔数
+					parkInfo.put("outMoney", tempArr[4]); // 实付金额
+					parkInfo.put("discountsNum", tempArr[5]); // 优惠笔数
+					parkInfo.put("discountsMoney", tempArr[6]); // 优惠金额
+					parkInfo.put("cashNum", tempArr[7]); // 现金笔数
+					parkInfo.put("cashMoney", tempArr[8]); // 现金金额
+					oneParkAllInfo.put("parkInfo_" + i, parkInfo);
+				}
+				boolean mark = false;
+				if (line > 3) {
+					if (!tempString.equals("*")) {
+						StatementAccount statementAccount = new StatementAccount();
+						String[] tempArr = tempString.split("\\|");
+						if(tempArr[0]==null||"".equals(tempArr[0])||tempArr[0].equals("空")||tempArr[0].equals("null")){
+							statementAccount.setpRecordId(0);
+						}else{
+							statementAccount.setpRecordId(Integer.parseInt(tempArr[0]));
+						}
+						if(tempArr[1]==null||"".equals(tempArr[1])||tempArr[1].equals("空")||tempArr[1].equals("null")){
+							statementAccount.setParkId(0);
+						}else{
+							statementAccount.setParkId(Integer.parseInt(tempArr[1]));
+						}
+						statementAccount.setPlateNum(tempArr[2]);
+						if(tempArr[3]==null||"".equals(tempArr[3])||tempArr[3].equals("空")||tempArr[3].equals("null")){
+							statementAccount.setOriginalAmount(0.0);
+							mark = true;
+						}else{
+							statementAccount.setOriginalAmount(Double.parseDouble(tempArr[3]));
+							mark = false;
+						}
+						if(tempArr[4]==null||"".equals(tempArr[4])||tempArr[4].equals("空")||tempArr[4].equals("null")){
+							statementAccount.setRecordAmount(0.0);
+						}else{
+							statementAccount.setRecordAmount(Double.parseDouble(tempArr[4]));
+						}
+						if(tempArr[5]==null||"".equals(tempArr[5])||tempArr[5].equals("空")||tempArr[5].equals("null")){
+							statementAccount.setCouponamount(0.0);
+						}else {
+							statementAccount.setCouponamount(Double.parseDouble(tempArr[5]));
+						}
+						statementAccount.setTradeDate(tempArr[6]);
+						statementAccount.setTradeTime(tempArr[7]);
+						statementAccount.setStatus(tempArr[8]);
+						statementAccount.setExplain(tempArr[9]);
+						if(!mark){
+							list.add(statementAccount);
+						}
+					}
+				}
+				line++;
+			}
+				if(StringUtils.isNotBlank(cluodParkId)){  //云平台编号为空 说明该停车场是云平台得，那么读取得FTP文件名与非云平台得不一样
+					fileName = fileName1 + DateUtils.format(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
+				}else{
+					fileName = fileName1 + DateUtils.formatYYYYMMDD(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
+				}
+			oneParkAllInfo.put("list", list);
+			reader.close();
+		} catch (IOException e) {
+			logger.info(e.getMessage()+"第一");
+			if(StringUtils.isNotBlank(cluodParkId)){  //云平台编号为空 说明该停车场是云平台得，那么读取得FTP文件名与非云平台得不一样
+				fileName = fileName1 + DateUtils.format(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
+			}else{
+				fileName = fileName1 + DateUtils.formatYYYYMMDD(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
+			}
+			continue;
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e1) {
+					if(StringUtils.isNotBlank(cluodParkId)){  //云平台编号为空 说明该停车场是云平台得，那么读取得FTP文件名与非云平台得不一样
+						fileName = fileName1 + DateUtils.format(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
+					}else{
+						fileName = fileName1 + DateUtils.formatYYYYMMDD(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
+					}
+					logger.info(e1.getMessage()+"第er");
+					continue;
+				}
+			}
+		}
+		}
+		return oneParkAllInfo;
+	}
+
+
 
 	/**
 	 * 财务对账金额  读取
