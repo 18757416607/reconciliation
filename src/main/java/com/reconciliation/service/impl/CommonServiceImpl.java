@@ -95,7 +95,7 @@ public class CommonServiceImpl implements CommonService{
 
         //招商数据
         /*FileUtil fileUtil = new FileUtil();
-        List<Map<String,Object>> cmdList = fileUtil.getCmbData();
+        List<Map<String,Object>> cmdList = fileUtil.getCmbData(config);
         for(int i = 0;i<cmdList.size();i++){
             commonMapper.insertUnionpay(cmdList.get(i));
         }*/

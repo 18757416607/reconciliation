@@ -275,6 +275,7 @@ public class FileUtil {
 			oneParkAllInfo.put("list", list);
 			reader.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 			logger.info(e.getMessage()+"第一");
 			if(StringUtils.isNotBlank(cluodParkId)){  //云平台编号为空 说明该停车场是云平台得，那么读取得FTP文件名与非云平台得不一样
 				fileName = fileName1 + DateUtils.format(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
@@ -287,6 +288,7 @@ public class FileUtil {
 				try {
 					reader.close();
 				} catch (IOException e1) {
+					e1.printStackTrace();
 					if(StringUtils.isNotBlank(cluodParkId)){  //云平台编号为空 说明该停车场是云平台得，那么读取得FTP文件名与非云平台得不一样
 						fileName = fileName1 + DateUtils.format(DateUtils.addOneDay(date1, i + 1)) + "_" + tempParkId + ".txt"; // 组装文件名称
 					}else{

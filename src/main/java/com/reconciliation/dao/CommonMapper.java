@@ -74,5 +74,6 @@ public interface CommonMapper {
      */
     public Map<String,String> findUnionAutoPayRecordIsExist(@Param(value = "pRecordId") String pRecordId, @Param(value = "parkid") String parkid);
 
+    public int insertUnionpay();
 
 }

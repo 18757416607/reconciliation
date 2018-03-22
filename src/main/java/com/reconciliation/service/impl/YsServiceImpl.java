@@ -135,23 +135,33 @@ public class YsServiceImpl implements YsService {
                     String newBeginDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/beginDate+" 00:00:00";
                     String newEndDate = /*DateUtils.format(DateUtils.addOneDay(new Date(),-1))*/endDate+" 23:59:59";
                     List<StatementAccount> list = (List<StatementAccount>)fileUtil.readFileByLines1(config,parkClient.get("parkId").toString(),parkClient.get("parkNameAbbreviation").toString(),beginDate,endDate,null).get("list");
-                    double originalAmount = 0; //应付金额
-                    double recordAmount = 0; //实付金额
-                    double couponamount = 0; //优惠金额
-                    Map<String,Object> map = new HashMap<String,Object>();
-                    for(int i = 0;i<list.size();i++){
-                        StatementAccount statementAccount = list.get(i);
-                        String date = statementAccount.getTradeDate();
-                        statementAccount.setTradeDate(date.substring(0,date.lastIndexOf(":")+3));
-                        originalAmount += list.get(i).getOriginalAmount();
-                        recordAmount += list.get(i).getRecordAmount();
-                        couponamount += list.get(i).getCouponamount();
+                    if(list!=null){
+                        double originalAmount = 0; //应付金额
+                        double recordAmount = 0; //实付金额
+                        double couponamount = 0; //优惠金额
+                        Map<String,Object> map = new HashMap<String,Object>();
+                        for(int i = 0;i<list.size();i++){
+                            StatementAccount statementAccount = list.get(i);
+                            String date = statementAccount.getTradeDate();
+                            statementAccount.setTradeDate(date.substring(0,date.lastIndexOf(":")+3));
+                            originalAmount += list.get(i).getOriginalAmount();
+                            recordAmount += list.get(i).getRecordAmount();
+                            couponamount += list.get(i).getCouponamount();
+                        }
+                        map.put("parkName",parkClient.get("parkName"));
+                        map.put("payCharge",originalAmount);
+                        map.put("realCharge",recordAmount);
+                        map.put("discount",couponamount);
+                        moenyList.add(map);
+                    }else{
+                        Map<String,Object> map = new HashMap<String,Object>();
+                        map.put("parkName",parkClient.get("parkName"));
+                        map.put("payCharge",0);
+                        map.put("realCharge",0);
+                        map.put("discount",0);
+                        moenyList.add(map);
                     }
-                    map.put("parkName",parkClient.get("parkName"));
-                    map.put("payCharge",originalAmount);
-                    map.put("realCharge",recordAmount);
-                    map.put("discount",couponamount);
-                    moenyList.add(map);
+
                 }
             }
             ObjectExcelRead.getParkReconciliationExcel(request,response,moenyList,beginDate,endDate);

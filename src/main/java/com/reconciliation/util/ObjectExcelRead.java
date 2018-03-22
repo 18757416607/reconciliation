@@ -135,7 +135,7 @@ public class ObjectExcelRead {
 		row1=sheet.createRow((short)(0)); //在现有行号后追加数据
 		row1.setHeightInPoints((short) 39);  //设置行高
 		HSSFCell cell = row1.createCell((short) 0);
-		cell.setCellValue(DateUtils.format(DateUtils.addOneDay(new Date(),-1))+"  停车场对账单明细");
+		cell.setCellValue(DateUtils.format(DateUtils.format(beginDate))+"至"+DateUtils.format(DateUtils.format(endDate)) + "停车场对账单明细报表");
 		//设置单元格居中
 		HSSFCellStyle cellStyle = wb.createCellStyle();  //新建单元格样式
 		cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 居中
@@ -243,7 +243,7 @@ public class ObjectExcelRead {
 		row1=sheet.createRow((short)(0)); //在现有行号后追加数据
 		row1.setHeightInPoints((short) 39);  //设置行高
 		HSSFCell cell = row1.createCell((short) 0);
-		cell.setCellValue(DateUtils.format(DateUtils.addOneDay(new Date(),-1))+"  停车场对账单");
+		cell.setCellValue(DateUtils.format(DateUtils.format(beginDate))+"至"+DateUtils.format(DateUtils.format(endDate))+"  停车场对账单总账报表");
 		//设置单元格居中
 		HSSFCellStyle cellStyle = wb.createCellStyle();  //新建单元格样式
 		cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 居中

@@ -59,7 +59,8 @@ public class YsController {
      */
     @RequestMapping(value = "/ysParkPayInfo")
     public String ysParkPayInfo(Model model){
-        model.addAttribute("parkList",commonService.getParkList());
+        List<Map<String,Object>> list = commonService.getParkList();
+        model.addAttribute("parkList",list);
         return "ysview/parkPayInfo";
     }
 

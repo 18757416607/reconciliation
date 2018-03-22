@@ -7,7 +7,7 @@
     <select id="getParkrecordInfo" resultType="java.util.Map" parameterType="java.util.Map">
         select cRecordId,parkid,plateNum,originalAmount,recordAmount,couponamount,paytype,pRecordId,createtime,'' dkid,recordStatus from base_parkrecord_list
         where parkid = #{parkId} and recordstatus is not null and endTime BETWEEN #{beginDate} and #{endDate}
-        and paytype in('UnionPay','ApplePay','UnionpayWallet') ORDER BY createtime ASC
+        and paytype in('UnionPay','ApplePay','UnionpayWallet') and recordStatus = '00' ORDER BY createtime ASC
     </select>
 
     <!-- 查询 银联代扣对账信息   银联代收对账信息在银联代扣表中 -->

@@ -7,6 +7,8 @@ import com.reconciliation.util.ObjectExcelRead;
 import com.reconciliation.util.PathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,9 +43,8 @@ public class UnionpayWallet {
      * @throws ParseException
      * @throws NumberFormatException
      */
-    @RequestMapping(value = "/uploadExcel",method = RequestMethod.POST)
-    public ModelAndView uploadExcel(@RequestParam(value="excel",required=false) MultipartFile file) {
-        ModelAndView mv = new ModelAndView("upload");
+    @PostMapping(value = "/uploadExcel")
+    public String  uploadExcel(@RequestParam(value="excel",required=false) MultipartFile file, Model model) {
         try{
             if (null != file && !file.isEmpty()) {
                 String filePath = PathUtil.getClasspath() + "uploadFiles/";								//文件上传路径
@@ -64,11 +65,11 @@ public class UnionpayWallet {
                     commonService.insertUnionpay(pd);
                 }
             }
-            mv.addObject("msg",file.getName()+"上传成功");
+            model.addAttribute("msg",DateUtils.format(DateUtils.addOneDay(new Date(),-1))+"银联钱包数据上传成功");
         }catch (Exception e){
-            mv.addObject("msg",file.getName()+"上传失败");
+            model.addAttribute("msg",DateUtils.format(DateUtils.addOneDay(new Date(),-1))+"银联钱包数据上传失败");
         }
-        return mv;
+        return "upload";
     }
 
 

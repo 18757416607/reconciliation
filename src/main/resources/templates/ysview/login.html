@@ -19,7 +19,7 @@
     <script type="text/javascript" src="../../static/easyui/jquery.easyui.min.js"></script>
     <style type="text/css">.panel-body{padding: 0px;}</style>
 </head>
-<body>
+<body onkeydown="keyLogin();">
 
 <div id="dd">
     <form id="ff" method="post" action="ttt" style="text-align: center;margin-top: 30px;line-height: 3;">
@@ -56,6 +56,13 @@
     function clearText(){
         $("#ff").form('clear');
     }
+    
+    function keyLogin() {
+        if (event.keyCode==13){
+            login();
+        }
+    }
+    
     function login(){
         var uname = $('#username').textbox("getValue");
         var password =$('#password').textbox("getValue");

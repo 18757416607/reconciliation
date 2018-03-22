@@ -582,7 +582,7 @@ public class YlServiceImpl implements YlService{
                 String yl_id = null;
                 String cabin_id = null;
                 String paytype = null;
-                if(unionPay.get("payType").equals("1")){  //1.银联代收    crecordid
+                /*if(unionPay.get("payType").equals("1")){  //1.银联代收    crecordid
                     yl_id = unionPay.get("cRecordId").toString();
                     cabin_id = temp.get("dkid").toString();
                     paytype = "银联代收";
@@ -598,6 +598,23 @@ public class YlServiceImpl implements YlService{
                     cabin_id = temp.get("cRecordId").toString();
                     paytype = "银联在线";
                 }else if(unionPay.get("payType").equals("5")){   //5.银联钱包  precordid
+                    yl_id = unionPay.get("pRecordId").toString();
+                    cabin_id = temp.get("pRecordId").toString();
+                    paytype = "银联钱包";
+                }*/
+                if(temp.get("paytype").equals("UnionAutoPay")){  //1.银联代收    crecordid
+                    yl_id = unionPay.get("cRecordId").toString();
+                    cabin_id = temp.get("dkid").toString();
+                    paytype = "银联代收";
+                } else if(temp.get("paytype").equals("ApplePay")){  //3.applyPay   crecordid
+                    yl_id = unionPay.get("cRecordId").toString();
+                    cabin_id = temp.get("cRecordId").toString();
+                    paytype = "applyPay";
+                }else if(temp.get("paytype").equals("UnionPay")){   //4.银联在线    crecordid
+                    yl_id = unionPay.get("cRecordId").toString();
+                    cabin_id = temp.get("cRecordId").toString();
+                    paytype = "银联在线";
+                }else if(temp.get("paytype").equals("UnionpayWallet")){   //5.银联钱包  precordid
                     yl_id = unionPay.get("pRecordId").toString();
                     cabin_id = temp.get("pRecordId").toString();
                     paytype = "银联钱包";
