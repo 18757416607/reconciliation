@@ -1,0 +1,3 @@
+diy.zip是自定义到本地的maven依赖
+jar包放的位置在哪，cmd就中就转到哪在执行命令
+mvn install:install-file -Dfile=bcprov-jdk15on-1.54.jar -DgroupId=diy.resouce -DartifactId=bcprov-jdk15on -Dversion=1.54 -Dpackaging=jar

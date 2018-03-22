@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>杭州奥体支付信息</title>
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{static/easyui/themes/bootstrap/easyui.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{static/datetimepicker/css/bootstrap.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{static/datetimepicker/css/bootstrap-datetimepicker.css}" />
+    <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{static/bootstrap-select/css/bootstrap-select.css}" />
+    <script type="text/javascript" th:src="@{static/easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{static/easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{static/datetimepicker/js/bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{static/datetimepicker/js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{static/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" th:src="@{static/bootstrap-select/js/bootstrap-select.js}"></script>
+    <style type="text/css">.panel-body{padding: 0px;}</style>
+</head>
+<body>
+
+<div id="dd" style="padding: 10px 15px 10px 25px;">
+    <div>
+        开始日期：<input id = "startDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
+        结束日期：<input id = "endDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
+        车牌号: <input style = "display: inline-block;width: 240px" type="text" class="form-control" id="platenum" placeholder="请输入车牌号（可选填）">
+        <button type="button" class="btn dropdown-toggle" id="search" data-toggle="dropdown" style="width: 80px;margin: 10px 15px 10px 25px;">搜索</button>
+    </div>
+</div>
+<div>
+<table id = "dg"  style="display:none;"
+       data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...'">
+    <thead>
+    <tr>
+        <th data-options="field:'plateNum',width:100,align:'center',halign:'center'">车牌号</th>
+        <th data-options="field:'recordAmount',width:100,align:'center',halign:'center'">实付金额</th>
+        <th data-options="field:'paytype',width:100,align:'center',halign:'center'">支付方式</th>
+        <th data-options="field:'endTime',width:100,align:'center',halign:'center'">车辆付费时间</th>
+    </tr>
+    </thead>
+</table>
+</div>
+
+
+</body>
+<script type="text/javascript">
+    $('#dg').css("height",window.innerHeight-$('#dd').innerHeight());
+    $(function(){
+
+        $('#search').on('click',function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var platenum = $('#platenum').val();
+            if(startDate==''){
+                $.messager.alert('系统消息','请选择开始日期在进行搜索!!!');
+                return false;
+            }else if(endDate==''){
+                $.messager.alert('系统消息','请选择结束日期在进行搜索!!!');
+                return false;
+            }
+            loadData(platenum,startDate,endDate);
+        });
+    });
+
+    function loadData(platenum,startDate,endDate){
+        $('#dg').datagrid({
+            url: 'getHangZhouAoTiData',
+            queryParams: {
+                platenum : platenum,
+                beginTime : startDate,
+                endTime : endDate
+            },
+            onLoadSuccess : function(data){
+            }
+        });
+    }
+
+</script>
+<script type="text/javascript" th:src="@{static/datetimepicker/js/user-defined.js}"></script>
+</html>
