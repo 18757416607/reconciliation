@@ -2,5 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reconciliation.dao.EquityMapper">
 
-	
+    <!-- 查询   权益 的对账信息 -->
+    <select id="getUnionPayUploadData" parameterType="java.util.Map" resultType="java.util.Map">
+        select money,cRecordId,pRecordId,UnionpayRightsId,payType,cmbId from base_unionPay_wallet_uploadData
+        where billDate BETWEEN #{beginDate} and #{endDate} and payType in (${paytrench_paytype})
+    </select>
+
+    <!-- 查询 权益支付信息 -->
+    <select id="getEquityPayInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        select el.orderid,el.platenum,el.parkid,el.txn_time,el.resp_code,bpl.pRecordId from equity_bill el
+        INNER JOIN base_parkrecord_list bpl on bpl.cRecordId = el.mer_orderid
+        where txn_time BETWEEN  #{beginDate} and #{endDate} and parkid = #{parkId}
+    </select>
+
+
 </mapper>

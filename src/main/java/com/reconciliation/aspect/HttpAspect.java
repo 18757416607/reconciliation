@@ -36,11 +36,11 @@ public class HttpAspect {
 	 * @Pointcut 可以减少重复代码,直接引用@Pointcut这个注解的方法名
 	 */
 	//@Pointcut("execution(public * com.weixin.controller.TestController.findUserAll(..))")
-	@Pointcut("execution(public * com.reconciliation.controller.CmbController.*(..))")
+	@Pointcut("execution(public * com.reconciliation.controller.FinanceController.*(..))")
 	public void log() {
 	}
 	//@Pointcut(value = "execution(public * com.weixin.controller.TestController.*(..))")
-	@Pointcut(value = "execution(public *  com.reconciliation.controller.CmbController.*(..))")
+	@Pointcut(value = "execution(public *  com.reconciliation.controller.FinanceController.*(..))")
 	public void logAll() {
 		
 	}

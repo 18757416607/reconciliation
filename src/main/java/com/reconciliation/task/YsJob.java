@@ -72,7 +72,7 @@ public class YsJob {
      0 10 3 ? * 1    每周星期天，3点10分 执行，注：1表示星期天
      0 10 3 ? * 1#3  每个月的第三个星期，星期天 执行，#号只能出现在星期的位置
      */
-    @Scheduled(cron="0 10 1 * * ?")
+    @Scheduled(cron="0 29 9 * * ?")
     public void ysJob() throws  Exception{
         //读取数据库连接信息
         logger.info(DateUtils.format(DateUtils.addOneDay(new Date(), -1)) + "==>" + "开始执行停车场账单,数据库数据写入");
@@ -188,7 +188,7 @@ public class YsJob {
         }
     }
 
-    @Scheduled(cron="0 21 11 * * ?")
+    @Scheduled(cron="0 32 9 * * ?")
     public void ysFptJob() throws  Exception{
         logger.info(DateUtils.format(DateUtils.addOneDay(new Date(), -1)) + "==>" + "开始执行停车场账单,FTP数据写入");
         //读取FTP文件

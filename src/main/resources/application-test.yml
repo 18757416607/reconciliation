@@ -67,7 +67,7 @@ config:
   account_filePath_prefix: INN
   account_filePath_suffix: 88ZM_
   #读取招商对账单信息
-  zs_filePath: D:\\FtpFile\\bank\\cmb_bank
+  zs_filePath: D:\\ #FtpFile\\bank\\cmb_bank
   zs_filePath_prefix: A10297-
   zs_filePath_suffix: .CMMX
   #一咻的银联代收商户代码,#一咻的银联权益商户代码,#一咻的银联applepay代码,#一咻的银联主动支付，银联在线支付代码

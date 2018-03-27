@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reconciliation.dao.YlMapper">
 
-
     <!-- 查询总支付表中数据  银联钱包、applePay、银联在线 -->
     <select id="getParkrecordInfo" resultType="java.util.Map" parameterType="java.util.Map">
         select cRecordId,parkid,plateNum,originalAmount,recordAmount,couponamount,paytype,pRecordId,createtime,'' dkid,recordStatus from base_parkrecord_list
@@ -48,7 +47,7 @@
     <select id="getDisagreeData_zzf_weixinzhifubao" parameterType="java.util.Map" resultType="java.util.Map">
        select createtime,paytype,platenum,crecordid from base_parkrecord_list
        where platenum = #{plateNum} and createtime BETWEEN #{beginDate} and #{endDate}
-       and originalAmount = #{park_originalAmount} and recordAmount = #{park_recordAmount}
+       and originalAmount = #{park_originalAmount} and recordAmount = #{park_recordAmount} and recordStatus = '00' LIMIT 1
     </select>
 
 

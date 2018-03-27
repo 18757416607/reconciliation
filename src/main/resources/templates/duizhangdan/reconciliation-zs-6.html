@@ -15,7 +15,7 @@
     <script type="text/javascript" th:src="@{static/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
     <script type="text/javascript" th:src="@{static/bootstrap-select/js/bootstrap-select.js}"></script>
     <script type="text/javascript" th:src="@{static/diy-js/formatter-js.js}"></script>
-    <title>支付渠道、一咻对账成功数据</title>
+    <title>支付渠道、一咻对账不完全成功数据</title>
     <style type="text/css">.panel-body{padding: 0px;}</style>
 
 </head>
@@ -38,12 +38,12 @@
             <th data-options="field:'pRecordId',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场流水号</th>
             <th data-options="field:'dkid',width:100,align:'center',halign:'center',formatter: diyFormatter">代扣表ID</th>
             <th data-options="field:'plateNum',width:100,align:'center',halign:'center',formatter: diyFormatter">车牌号</th>
-            <th data-options="field:'cabin_paytype',width:100,align:'center',halign:'center',formatter: diyFormatter">支付类型</th>
+            <th data-options="field:'cabin_paytype',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻支付类型</th>
             <th data-options="field:'cabin_originalAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端应付金额</th>
             <th data-options="field:'cabin_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端实付金额</th>
             <th data-options="field:'cabin_couponamount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端优惠金额</th>
-            <th data-options="field:'yl_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道实付金额</th>
-            <th data-options="field:'yl_explain',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付类型</th>
+            <th data-options="field:'zs_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道实付金额</th>
+            <th data-options="field:'zs_explain',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付类型</th>
         </tr>
         </thead>
     </table>
@@ -65,7 +65,7 @@
             return;
         }
         var opts = $("#dg").datagrid("options");
-        opts.url = "getPayYiXiuYesData";
+        opts.url = "getPayYiXiuNoData_zs";
         $('#dg').datagrid('load', {
             parkId: park,
             beginTime: startDate,

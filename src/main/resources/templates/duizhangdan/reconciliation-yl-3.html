@@ -14,6 +14,7 @@
     <script type="text/javascript" th:src="@{static/datetimepicker/js/bootstrap-datetimepicker.js}"></script>
     <script type="text/javascript" th:src="@{static/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
     <script type="text/javascript" th:src="@{static/bootstrap-select/js/bootstrap-select.js}"></script>
+    <script type="text/javascript" th:src="@{static/diy-js/formatter-js.js}"></script>
     <title>停车场、一咻对账不完全成功数据</title>
     <style type="text/css">.panel-body{padding: 0px;}</style>
 
@@ -33,19 +34,19 @@
            data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...'">
         <thead>
         <tr>
-            <th data-options="field:'cRecordId',width:100,align:'center',halign:'center'">卡宾流水号</th>
-            <th data-options="field:'pRecordId',width:100,align:'center',halign:'center'">停车场流水号</th>
-            <th data-options="field:'dkid',width:100,align:'center',halign:'center'">代扣表ID</th>
-            <th data-options="field:'plateNum',width:100,align:'center',halign:'center'">车牌号</th>
-            <th data-options="field:'cabin_paytype',width:100,align:'center',halign:'center'">支付类型</th>
-            <th data-options="field:'cabin_originalAmount',width:100,align:'center',halign:'center'">一咻端应付金额</th>
-            <th data-options="field:'cabin_recordAmount',width:100,align:'center',halign:'center'">一咻端实付金额</th>
-            <th data-options="field:'cabin_couponamount',width:100,align:'center',halign:'center'">一咻端优惠金额</th>
-            <th data-options="field:'cabin_date',width:100,align:'center',halign:'center'">一咻端记录时间</th>
-            <th data-options="field:'park_originalAmount',width:100,align:'center',halign:'center'">停车场端应付金额</th>
-            <th data-options="field:'park_recordAmount',width:100,align:'center',halign:'center'">停车场端实付金额</th>
-            <th data-options="field:'park_couponamount',width:100,align:'center',halign:'center'">停车场端优惠金额</th>
-            <th data-options="field:'park_date',width:100,align:'center',halign:'center'">停车场端记录时间</th>
+            <th data-options="field:'cRecordId',width:100,align:'center',halign:'center',formatter: diyFormatter">卡宾流水号</th>
+            <th data-options="field:'pRecordId',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场流水号</th>
+            <th data-options="field:'dkid',width:100,align:'center',halign:'center',formatter: diyFormatter">代扣表ID</th>
+            <th data-options="field:'plateNum',width:100,align:'center',halign:'center',formatter: diyFormatter">车牌号</th>
+            <th data-options="field:'cabin_paytype',width:100,align:'center',halign:'center',formatter: diyFormatter">支付类型</th>
+            <th data-options="field:'cabin_originalAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端应付金额</th>
+            <th data-options="field:'cabin_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端实付金额</th>
+            <th data-options="field:'cabin_couponamount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端优惠金额</th>
+            <th data-options="field:'cabin_date',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端记录时间</th>
+            <th data-options="field:'park_originalAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场端应付金额</th>
+            <th data-options="field:'park_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场端实付金额</th>
+            <th data-options="field:'park_couponamount',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场端优惠金额</th>
+            <th data-options="field:'park_date',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场端记录时间</th>
         </tr>
         </thead>
     </table>

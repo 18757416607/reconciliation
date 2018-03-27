@@ -37,9 +37,9 @@
                    data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...'">
                 <thead>
                 <tr>
-                    <th data-options="field:'yl_num',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道对账编号</th>
-                    <th data-options="field:'yl_explain',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付类型</th>
-                    <th data-options="field:'yl_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付金额</th>
+                    <th data-options="field:'zs_num',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道对账编号</th>
+                    <th data-options="field:'zs_explain',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付类型</th>
+                    <th data-options="field:'zs_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付金额</th>
                 </tr>
                 </thead>
             </table>
@@ -86,14 +86,14 @@
         }
         $('#dg2').css('display','block');
         var opts1 = $("#dg1").datagrid("options");
-        opts1.url = "getPayYiXiuNoAllData";
+        opts1.url = "getPayYiXiuNoAllData_zs";
         $('#dg1').datagrid('load', {
             parkId: park,
             beginTime: startDate,
             endTime:endDate
         });
         var opts2 = $("#dg2").datagrid("options");
-        opts2.url = "getPayYiXiuNoAllData1";
+        opts2.url = "getPayYiXiuNoAllData1_zs";
         $('#dg2').datagrid('load', {
             parkId: park,
             beginTime: startDate,

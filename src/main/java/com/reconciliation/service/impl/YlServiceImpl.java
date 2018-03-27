@@ -96,7 +96,7 @@ public class YlServiceImpl implements YlService{
         Iterator<StatementAccount> siter = statementAccountList.iterator();
         while (siter.hasNext()) {
             StatementAccount  statementAccount= siter.next();
-            if(statementAccount.getExplain().equals("微信支付宝支付")||statementAccount.getExplain().equals("预缴费")||statementAccount.getExplain().equals("现金收费")||statementAccount.getExplain().equals("预交费成功")||statementAccount.getExplain().equals("未知")||statementAccount.getExplain().equals("余额支付")) {
+            if(statementAccount.getExplain().equals("微信支付宝支付")||statementAccount.getExplain().equals("预缴费")||statementAccount.getExplain().equals("现金收费")||statementAccount.getExplain().equals("预交费成功")||statementAccount.getExplain().equals("未知")||statementAccount.getExplain().equals("余额支付")||statementAccount.getExplain().equals("卡宾移动收费")) {
                 siter.remove();
                 continue;
             }
@@ -202,17 +202,14 @@ public class YlServiceImpl implements YlService{
         Double cabin_noAll_couponamountAll = 0d;    //卡宾对账失败得总优惠金额
 
         int a = 0,b = 0,c = 0,d=0,e=0;
-        int filter_count = 0;
         //以停车场为中心进行对账
         for(int i = 0;i<statementAccountList.size();i++){
             StatementAccount statementAccount = statementAccountList.get(i);
             Date datetime = DateUtils.formatStrToDate(statementAccount.getTradeDate()+statementAccount.getTradeTime());//停车场FTP文件日期
             if(DateUtils.compare_date(datetime.getTime(), DateUtils.formatStrToDate1(beginDate).getTime())==-1){  //该条记录的时间必须比开始时间要大
-                filter_count++;
                 continue;
             }
             if(DateUtils.compare_date(datetime.getTime(), DateUtils.formatStrToDate1(endDate).getTime())==1){  //该条记录的时间必须比结束时间要小
-                filter_count++;
                 continue;
             }
             park_originalAmountAll += statementAccount.getOriginalAmount();
@@ -387,11 +384,9 @@ public class YlServiceImpl implements YlService{
                 StatementAccount statementAccount = statementAccountList.get(j);
                 Date datetime = DateUtils.formatStrToDate(statementAccount.getTradeDate()+statementAccount.getTradeTime());
                 if(DateUtils.compare_date(datetime.getTime(), DateUtils.formatStrToDate1(beginDate).getTime())==-1){  //该条记录的时间必须比开始时间要大
-                    filter_count++;
                     continue;
                 }
                 if(DateUtils.compare_date(datetime.getTime(), DateUtils.formatStrToDate1(endDate).getTime())==1){  //该条记录的时间必须比结束时间要小
-                    filter_count++;
                     continue;
                 }
                 if(temp.get("pRecordId")==null||temp.get("pRecordId").equals("")){  //主动支付没有pRecordId
@@ -772,8 +767,6 @@ public class YlServiceImpl implements YlService{
 
         System.out.println("停车场支付数量："+((List<StatementAccount>)ftpData.get("list")).size());
         System.out.println("卡宾支付数量："+kabinReconciliation.size());
-        System.out.println("被时间过滤停车场支付数量:"+filter_count);
-        System.out.println("过滤后的听停车场支付数量:"+(((List<StatementAccount>)ftpData.get("list")).size()-filter_count));
         System.out.println("----------------------------------------------------");
 
         System.out.println("三方对账成功:"+yesAllList.size());

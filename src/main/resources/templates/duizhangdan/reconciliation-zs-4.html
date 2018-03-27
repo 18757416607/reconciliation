@@ -89,14 +89,14 @@
         }
         $('#dg2').css('display','block');
         var opts1 = $("#dg1").datagrid("options");
-        opts1.url = "getYiXiuNoAllParkData1";
+        opts1.url = "getYiXiuNoAllParkData1_zs";
         $('#dg1').datagrid('load', {
             parkId: park,
             beginTime: startDate,
             endTime:endDate
         });
         var opts2 = $("#dg2").datagrid("options");
-        opts2.url = "getYiXiuNoAllParkData2";
+        opts2.url = "getYiXiuNoAllParkData2_zs";
         $('#dg2').datagrid('load', {
             parkId: park,
             beginTime: startDate,

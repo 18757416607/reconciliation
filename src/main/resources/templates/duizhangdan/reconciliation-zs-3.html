@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>停车场、一咻对账不完全成功数据</title>
     <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{static/easyui/themes/bootstrap/easyui.css}" />
     <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{static/datetimepicker/css/bootstrap.css}" />
     <link charset="UTF-8" rel="stylesheet" type="text/css" th:href="@{static/datetimepicker/css/bootstrap-datetimepicker.css}" />
@@ -15,10 +15,8 @@
     <script type="text/javascript" th:src="@{static/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
     <script type="text/javascript" th:src="@{static/bootstrap-select/js/bootstrap-select.js}"></script>
     <script type="text/javascript" th:src="@{static/diy-js/formatter-js.js}"></script>
-    <title>支付渠道、一咻对账成功数据</title>
-    <style type="text/css">.panel-body{padding: 0px;}</style>
-
 </head>
+<body>
 <div style = "margin: 10px 15px 10px 25px;">
     停车场：
     <select id="park" class="selectpicker" data-live-search="true" >
@@ -30,26 +28,29 @@
     结束日期：<input id = "endDate" size="16" type="text" readonly class="form-control" style="width: 170px;display: inline;">&nbsp;&nbsp;&nbsp;
     <button type="button" class="btn dropdown-toggle" id="search" data-toggle="dropdown">搜索</button>
 
-    <table id = "dg" class="easyui-datagrid"
+    <table id = "dg" class="easyui-datagrid" style="padding: 80px;display:none"
            data-options="url:'',fitColumns:true,singleSelect:true,fitColumns:true,striped:true,rownumbers:true,loadMsg:'数据处理中...'">
         <thead>
         <tr>
-            <th data-options="field:'cRecordId',width:100,align:'center',halign:'center',formatter: diyFormatter">卡宾流水号</th>
+            <th data-options="field:'cRecordId',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻流水号</th>
             <th data-options="field:'pRecordId',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场流水号</th>
-            <th data-options="field:'dkid',width:100,align:'center',halign:'center',formatter: diyFormatter">代扣表ID</th>
+            <th data-options="field:'dkid',width:100,align:'center',halign:'center',formatter: diyFormatter">代扣流水号</th>
             <th data-options="field:'plateNum',width:100,align:'center',halign:'center',formatter: diyFormatter">车牌号</th>
+
             <th data-options="field:'cabin_paytype',width:100,align:'center',halign:'center',formatter: diyFormatter">支付类型</th>
             <th data-options="field:'cabin_originalAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端应付金额</th>
             <th data-options="field:'cabin_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端实付金额</th>
             <th data-options="field:'cabin_couponamount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端优惠金额</th>
-            <th data-options="field:'yl_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道实付金额</th>
-            <th data-options="field:'yl_explain',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付类型</th>
+            <th data-options="field:'park_originalAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场端应付金额</th>
+            <th data-options="field:'park_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场端实付金额</th>
+            <th data-options="field:'park_couponamount',width:100,align:'center',halign:'center',formatter: diyFormatter">停车场端优惠金额</th>
         </tr>
         </thead>
     </table>
 </div>
+</body>
 <script>
-    $('#dg').css("height",window.innerHeight-56);
+    $('#dg').css("height",window.innerHeight-46);
     $('#search').on('click',function () {
         var park = $('#park').val();
         var startDate = $('#startDate').val();
@@ -65,7 +66,7 @@
             return;
         }
         var opts = $("#dg").datagrid("options");
-        opts.url = "getPayYiXiuYesData";
+        opts.url = "getYiXiuNoParkData_zs";
         $('#dg').datagrid('load', {
             parkId: park,
             beginTime: startDate,

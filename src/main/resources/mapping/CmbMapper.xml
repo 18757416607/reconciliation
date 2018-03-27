@@ -8,5 +8,13 @@
         where billDate BETWEEN #{beginDate} and #{endDate} and payType in (${paytrench_paytype})
     </select>
 
+    <!-- 查询 招商代扣对账信息  招商代收对账信息在招商代扣表中 -->
+    <select id="getCmbAutoPayInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        select bpl.cRecordId,bpl.parkid,bpl.plateNum,bpl.originalAmount,bpl.recordAmount,bpl.couponamount,bpl.paytype,bpl.pRecordId,bca.create_time createtime,
+        bca.merch_serial dkid,bpl.recordStatus from base_parkrecord_list bpl INNER JOIN base_cmb_autopay_log bca on bpl.crecordid = bca.pay_id
+        where  parkId = #{parkId} and  bca.create_time BETWEEN #{beginDate} and #{endDate}  and bca.is_succ_pay = 1
+        and bpl.paytype in ('CmbAutoPay','UnionAutoPay') and bpl.recordstatus is not null
+    </select>
+    
 	
 </mapper>

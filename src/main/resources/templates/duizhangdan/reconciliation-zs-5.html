@@ -42,8 +42,8 @@
             <th data-options="field:'cabin_originalAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端应付金额</th>
             <th data-options="field:'cabin_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端实付金额</th>
             <th data-options="field:'cabin_couponamount',width:100,align:'center',halign:'center',formatter: diyFormatter">一咻端优惠金额</th>
-            <th data-options="field:'yl_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道实付金额</th>
-            <th data-options="field:'yl_explain',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付类型</th>
+            <th data-options="field:'zs_recordAmount',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道实付金额</th>
+            <th data-options="field:'zs_explain',width:100,align:'center',halign:'center',formatter: diyFormatter">支付渠道支付类型</th>
         </tr>
         </thead>
     </table>
@@ -65,7 +65,7 @@
             return;
         }
         var opts = $("#dg").datagrid("options");
-        opts.url = "getPayYiXiuYesData";
+        opts.url = "getPayYiXiuYesData_zs";
         $('#dg').datagrid('load', {
             parkId: park,
             beginTime: startDate,
