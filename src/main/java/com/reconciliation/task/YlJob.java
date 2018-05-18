@@ -42,7 +42,7 @@ public class YlJob {
      *    只能一天一天获取对账文件
      * @throws Exception
      */
-    @Scheduled(cron="0 46 15 * * ?")
+    @Scheduled(cron="0 16 9 * * ?")
     public void getUnionpayFile() throws  Exception{
        /* logger.info("获取银联（代扣、ApplyPay、在线、权益）对账单定时任务执行中");
         UrlConnectUtil.postRtnStr("http://api.cabin-app.com:8099/reconciliation/statement/getUnionpayFile.do", "");
